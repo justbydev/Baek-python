@@ -1,0 +1,23 @@
+import sys
+
+n=int(sys.stdin.readline())
+
+dp=[]
+dp.append([0,1,1,1,1,1,1,1,1,1])
+dp.append([1,1,2,2,2,2,2,2,2,1])
+if n<=2:
+    result=sum(dp[n-1])
+else:
+    for i in range(2, n):
+        temp=[]
+        for j in range(10):
+            if j==0:
+                temp.append(dp[i-1][j+1])
+            elif j==9:
+                temp.append(dp[i-1][j-1])
+            else:
+                temp.append(dp[i-1][j-1]+dp[i-1][j+1])
+        dp.append(temp)
+    result=sum(dp[n-1])
+
+print(result%1000000000)
