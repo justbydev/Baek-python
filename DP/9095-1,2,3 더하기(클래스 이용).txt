@@ -1,0 +1,24 @@
+import sys
+
+class add:
+    def __init__(self, count, result):
+        self.count=count
+        self.result=result
+    def cal(self, num):
+        if num<=self.count or num<=3:
+            return self.result[num-1]
+        else:
+            for i in range(self.count+1,num+1):
+                self.result.append(self.result[i-2]+self.result[i-3]+self.result[i-4])
+            self.count=num
+            return self.result[num-1]
+        
+testcase=int(sys.stdin.readline())
+a=add(3, [1, 2, 4])
+re=[]
+for i in range(testcase):
+    n=int(sys.stdin.readline())
+    re.append(a.cal(n))
+
+for i in range(testcase):
+    print(re[i])

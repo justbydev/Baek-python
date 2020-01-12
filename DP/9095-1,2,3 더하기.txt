@@ -1,0 +1,17 @@
+import sys
+
+testcase=int(sys.stdin.readline())
+
+result=[1, 2, 4]
+re=[]
+for i in range(testcase):
+    n=int(sys.stdin.readline())
+    if n<=3:
+        re.append(result[n-1])
+    else:
+        for j in range(len(result), n):
+            result.append(result[j-1]+result[j-2]+result[j-3])
+        re.append(result[n-1])
+
+for i in range(testcase):
+    print(re[i])
