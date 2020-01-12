@@ -1,0 +1,19 @@
+import sys
+
+n=int(sys.stdin.readline())
+
+dp=[]
+dp.append([1,1,1,1,1,1,1,1,1,1])
+result=0
+if n==1:
+    result=sum(dp[0])
+else:
+    for i in range(1, n):
+        temp=[]
+        for j in range(10):
+            tmp=0
+            for k in range(j+1):
+                tmp=tmp+dp[i-1][k]
+            temp.append(tmp)
+        dp.append(temp)
+print(sum(dp[n-1])%10007)
