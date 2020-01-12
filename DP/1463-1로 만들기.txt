@@ -1,0 +1,26 @@
+import sys
+
+num=int(sys.stdin.readline())
+result=[]
+result.append(-1)
+result.append(0)
+result.append(1)
+result.append(1)
+
+for i in range(4, num+1):
+    two=0
+    three=0
+    if i%2==0:
+        two=1
+    if i%3==0:
+        three=1
+    if two==1 and three==1:
+        result.append(min(result[i-1], result[i//2], result[i//3])+1)
+    elif two==1 and three!=1:
+        result.append(min(result[i-1], result[i//2])+1)
+    elif two!=1 and three==1:
+        result.append(min(result[i-1], result[i//3])+1)
+    elif two!=1 and three!=1:
+        result.append(result[i-1]+1)
+
+print(result[num])
