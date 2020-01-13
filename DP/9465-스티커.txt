@@ -1,0 +1,32 @@
+import sys
+
+result=[]
+testcase=int(sys.stdin.readline())
+for i in range(testcase):
+    n=int(sys.stdin.readline())
+    now=[]
+    for j in range(2):
+        tmp=[]
+        tmp=list(map(int, sys.stdin.readline().split()))
+        now.append(tmp)
+    sticker=[]
+    for j in range(2):
+        tmp=[]
+        for k in range(n):
+            tmp.append(-1)
+        sticker.append(tmp)
+    sticker[0][0]=now[0][0]
+    sticker[1][0]=now[1][0]
+    if n==1:
+        result.append(max(sticker[0][0], sticker[1][0]))
+    elif n==2:
+        result.append(max(sticker[0][0]+now[1][1], sticker[1][0]+now[0][1]))
+    else:
+        sticker[0][1]=sticker[1][0]+now[0][1]
+        sticker[1][1]=sticker[0][0]+now[1][1]
+        for j in range(2, n):
+            sticker[0][j]=max(sticker[1][j-1]+now[0][j], sticker[1][j-2]+now[0][j])
+            sticker[1][j]=max(sticker[0][j-1]+now[1][j], sticker[0][j-2]+now[1][j])
+        result.append(max(sticker[0][n-1], sticker[1][n-1]))
+for i in range(testcase):
+    print(result[i])
