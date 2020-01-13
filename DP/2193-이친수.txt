@@ -1,0 +1,12 @@
+import sys
+
+num=int(sys.stdin.readline())
+zero=[0,0,1]
+one=[0,1,0]
+if num<=2:
+    print(zero[num]+one[num])
+else:
+    for i in range(3, num+1):
+        zero.append(zero[i-1]+one[i-1])
+        one.append(zero[i-1])
+    print(zero[num]+one[num])
