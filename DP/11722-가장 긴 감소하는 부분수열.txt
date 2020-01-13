@@ -1,0 +1,19 @@
+import sys
+
+N=int(sys.stdin.readline())
+
+num=[]
+num=list(map(int, sys.stdin.readline().split()))
+long=[1]
+last=[1]
+
+for i in range(1, N):
+    one=long[i-1]
+    tmp=0
+    for j in range(i):
+        if (num[j]>num[i]) and (last[j]>tmp):
+            tmp=last[j]
+    tmp=tmp+1
+    last.append(tmp)
+    long.append(max(one, tmp))
+print(long[N-1])
