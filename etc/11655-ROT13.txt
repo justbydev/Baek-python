@@ -1,0 +1,18 @@
+import sys
+
+string=list(sys.stdin.readline())
+
+for i in range(len(string)):
+    if (ord(string[i])>=ord('a') and ord(string[i])<=ord('z')):
+        if ((ord(string[i])-ord('a'))//13>=1):
+            string[i]=chr(ord('a')+(ord(string[i])-ord('a'))%13)
+        else:
+            string[i]=chr(ord(string[i])+13)
+    elif (ord(string[i])>=ord('A') and ord(string[i])<=ord('Z')):
+        if ((ord(string[i])-ord('A'))//13>=1):
+            string[i]=chr(ord('A')+(ord(string[i])-ord('A'))%13)
+        else:
+            string[i]=chr(ord(string[i])+13)
+for i in range(len(string)):
+    print(string[i], end='')
+print()
