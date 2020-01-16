@@ -1,0 +1,30 @@
+import sys
+
+N,K=map(int, sys.stdin.readline().split())
+
+
+dp=[]
+tmp=[]
+for i in range(N+1):
+    tmp.append(0)
+dp.append(tmp)
+tmp=[]
+for i in range(N+1):
+    tmp.append(1)
+dp.append(tmp)
+
+if K<=1:
+    print(dp[K][N])
+else:
+    for i in range(2,K+1):
+        tmp=[]
+        for j in range(N+1):
+            if j==0:
+                tmp.append(1)
+            else:
+                sm=0
+                for k in range(j+1):
+                    sm=sm+dp[i-1][k]
+                tmp.append(sm)
+        dp.append(tmp)
+    print(dp[K][N]%1000000000)
