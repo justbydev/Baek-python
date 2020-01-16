@@ -1,0 +1,29 @@
+import sys
+
+n=int(sys.stdin.readline())
+num=list(map(int, sys.stdin.readline().split()))
+
+num2=num.copy()
+num2.reverse()
+
+last=[1]
+last2=[1]
+
+for i in range(1, n):
+    long=0
+    long2=0
+    for j in range(i):
+        if num[j]<num[i] and long<last[j]:
+            long=last[j]
+        if num2[j]<num2[i] and long2<last2[j]:
+            long2=last2[j]
+    last.append(long+1)
+    last2.append(long2+1)
+
+last2.reverse()
+
+ans=last[0]+last2[0]-1
+for i in range(1, n):
+    if last[i]+last2[i]-1>ans:
+        ans=last[i]+last2[i]-1
+print(ans)
