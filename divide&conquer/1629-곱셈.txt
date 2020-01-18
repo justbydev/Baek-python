@@ -1,0 +1,16 @@
+import sys
+
+def power(a, b, c):
+    if b==0:
+        return 1
+    else:
+        t=power(a,b//2,c)
+        if b%2==0:
+            return (t**2)%c
+        elif b%2==1:
+            return a*(t**2)%c
+        
+A,B,C=map(int, sys.stdin.readline().split())
+
+res=power(A,B,C)
+print(res)
