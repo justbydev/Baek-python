@@ -1,0 +1,21 @@
+import sys
+
+
+A,P=map(int, sys.stdin.readline().split())
+
+num=[A]
+while True:
+    new_str=str(num[len(num)-1])
+    new=0
+    for i in range(len(new_str)):
+        new=new+int(new_str[i])**P
+    if new in num:
+        break
+    else:
+        num.append(new)
+count=0
+for i in range(len(num)):
+    if num[i]==new:
+        break
+    count=count+1
+print(count)
