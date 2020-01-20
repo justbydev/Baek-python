@@ -1,0 +1,66 @@
+import sys
+
+def prim(graph, V, E):
+    count=0
+    tree=[0]
+    mst=[]
+    parent=[-1]*V
+    depth=[0]*V
+    res=0
+    while True:
+        if count==V-1:
+            break
+        sm=1000001
+        st=0
+        ed=0
+        realroot1=-1
+        realroot2=-1
+        for i in range(len(tree)):
+            for j in range(len(graph[tree[i]])):
+                if [tree[i], graph[tree[i]][j][0]] not in mst and [graph[tree[i]][j][0], tree[i]] not in mst:
+                    if sm>graph[tree[i]][j][1]:
+                        root1=find(parent, tree[i])
+                        root2=find(parent, graph[tree[i]][j][0])
+                        if root1!=root2:
+                            sm=graph[tree[i]][j][1]
+                            st=tree[i]
+                            ed=graph[tree[i]][j][0]
+                            realroot1=root1
+                            realroot2=root2
+        tree.append(ed)
+        mst.append([st, ed])
+        union(parent, depth, realroot1, realroot2)
+        count=count+1
+        res=res+sm
+    return res
+
+def find(parent, vertex):
+    while True:
+        if parent[vertex]==-1:
+            break
+        vertex=parent[vertex]
+    return vertex
+
+def union(parent, depth, root1, root2):
+    if depth[root1]==depth[root2]:
+        parent[root1]=root2
+        depth[root1]=0
+        depth[root2]=depth[root2]+1
+    elif depth[root1]>depth[root2]:
+        depth[root2]=0
+        parent[root2]=root1
+    elif depth[root1]<depth[root2]:
+        depth[root1]=0
+        parent[root1]=root2
+            
+
+V,E=map(int, sys.stdin.readline().split())
+graph=[]
+for i in range(V):
+    graph.append([])
+for _ in range(E):
+    st,ed,w=map(int, sys.stdin.readline().split())
+    graph[st-1].append([ed-1, w])
+    graph[ed-1].append([st-1, w])
+res=prim(graph, V, E)
+print(res)
