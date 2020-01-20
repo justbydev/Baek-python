@@ -1,0 +1,47 @@
+import sys
+
+
+def find(vertex, parent):
+    while True:
+        if parent[vertex]==-1:
+            break
+        vertex=parent[vertex]
+    return vertex
+
+def union(root1, root2, parent, depth):
+    if depth[root1]==depth[root2]:
+        parent[root1]=root2
+        depth[root1]=0
+        depth[root2]=depth[root2]+1
+    elif depth[root1]>depth[root2]:
+        parent[root2]=root1
+        depth[root2]=0
+    elif depth[root1]<depth[root2]:
+        parent[root1]=root2
+        depth[root1]=0
+                        
+def kruskal(graph, V, E):
+    weight=0
+    count=0
+    parent=[-1]*V
+    depth=[0]*V
+    for i in range(E):
+        if count==V-1:
+            break
+        root1=find(graph[i][1], parent)
+        root2=find(graph[i][2], parent)
+        if root1!=root2:
+            union(root1, root2, parent, depth)
+            weight=weight+graph[i][0]
+    return weight
+
+
+V,E=map(int, sys.stdin.readline().split())
+
+graph=[]
+for _ in range(E):
+    st,ed,w=map(int, sys.stdin.readline().split())
+    graph.append([w, st-1, ed-1])
+graph.sort()
+res=kruskal(graph, V, E)
+print(res)
