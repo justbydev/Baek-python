@@ -1,0 +1,16 @@
+import sys
+
+N=sys.stdin.readline()
+num=[]
+sm=0
+for i in range(len(N)-1):
+    num.append(int(N[i]))
+    sm=sm+int(N[i])
+if sm%3!=0 or 0 not in num:
+    print('-1')
+else:
+    num.sort()
+    num.reverse()
+    for i in num:
+        print(i, end='')
+    print()

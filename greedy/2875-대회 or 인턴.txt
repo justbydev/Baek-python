@@ -1,0 +1,16 @@
+import sys
+
+N,M,K=map(int, sys.stdin.readline().split())
+
+count=0
+while True:
+    if (N-2)+(M-1)<K:
+        break
+    if N<2:
+        break
+    if M<1:
+        break
+    count=count+1
+    N=N-2
+    M=M-1
+print(count)
