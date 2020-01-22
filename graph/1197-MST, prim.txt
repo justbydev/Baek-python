@@ -1,0 +1,43 @@
+import sys
+import heapq
+
+#prim이란 것은 결국 tree에 포함된 노드들, 즉, visited된 노드들과 연결된 노드들 중에서 그 연결 간선의 가중치가
+#가장 작은 놈을 찾는 것이니까 heap을 이용해서 가장 작은 놈을 찾고 visited되지 않은 놈이면 tree에 포함시키면 된다
+#또한 cycle에 있어서 tree에 포함된 노드와 연결된 노드에 대해서 하고 있을 때 그 노드가 visited 되어 있으면 결국
+#그것들이 cycle을 형성하게 되는 것이고 visited 하지 않은 노드들만 계속 포함시키게 되면 결국 cycle은 생기지 않게 된다
+#즉, cycle이라는 것은 간선으로 연결된 두 노드 모두 어떤 원하는 집합 속에 visited로 포함되어 있을 때
+#생성되는 것이다.
+def prim(graph, V, E):
+    mst=[]
+    visited=[0]*V
+    visited[0]=1
+    for i in graph[0]:
+        heapq.heappush(mst, i)
+    count=0
+    res=0
+    while True:
+        if count==V-1:
+            break
+        tmp=heapq.heappop(mst)
+        if visited[tmp[1]]==0:
+            visited[tmp[1]]=1
+            count=count+1
+            res=res+tmp[0]
+            for i in graph[tmp[1]]:
+                if visited[i[1]]==0:
+                    heapq.heappush(mst, i)
+    return res
+        
+            
+            
+        
+V,E=map(int, sys.stdin.readline().split())
+graph=[]
+for _ in range(V):
+    graph.append([])
+for _ in range(E):
+    st,ed,w=map(int, sys.stdin.readline().split())
+    graph[st-1].append([w, ed-1])
+    graph[ed-1].append([w, st-1])
+res=prim(graph, V, E)
+print(res)
