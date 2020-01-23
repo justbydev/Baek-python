@@ -1,0 +1,20 @@
+import sys
+import heapq
+
+N=int(sys.stdin.readline())
+job=[]
+for _ in range(N):
+    st,ed=map(int, sys.stdin.readline().split())
+    tmp=[ed,st]
+    heapq.heappush(job, tmp)
+count=1
+now=heapq.heappop(job)
+nowend=now[0]
+while True:
+    if len(job)==0:
+        break
+    now=heapq.heappop(job)
+    if nowend<=now[1]:
+        count=count+1
+        nowend=now[0]
+print(count)
