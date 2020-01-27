@@ -1,0 +1,61 @@
+import sys
+
+N=int(sys.stdin.readline())
+num=[]
+for _ in range(N):
+    a=int(sys.stdin.readline())
+    num.append(a)
+num.sort(reverse=True)
+res=0
+pos=0
+neg=0
+if len(num)==0:#수열의 길이가 0일때
+    print(0)
+else:#내림차순으로 정렬된 상태
+    if num[0]>0:#양수인 경우
+        pos=0
+        while True:
+            if pos>len(num)-1:#현재 index가 범위를 넘는 경우
+                break
+            if pos+1>len(num)-1:#현재 index 다음이 범위를 넘는 경우
+                if num[pos]<=0:#현재 index가 양수가 아니면 양수 파트가 아니므로 그냥 break
+                    break
+                res=res+num[pos]
+                pos=pos+1
+            elif num[pos]>1 and num[pos+1]>1:#현재 index와 다음 index 모두 양수인 경우 묶어서 곱하기
+                res=res+num[pos]*num[pos+1]
+                pos=pos+2
+            elif num[pos]>1 and num[pos+1]<=1:#다음 index가 1이하인 경우 곱하면 현재 index 양수가 사라지므로
+                res=res+num[pos]#현재 index의 수만 더함
+                pos=pos+1
+            elif num[pos]==1:#현재 index가 1인 경우 그냥 더함
+                res=res+num[pos]
+                pos=pos+1
+            elif num[pos]<=0:#현재 index가 0이하인 경우 break
+                break
+    if num[len(num)-1]<0:#음수인 경우
+        neg=len(num)-1
+        while True:
+            if neg<0:#현재 index가 범위를 넘는 경우
+                break
+            if neg-1<0:# 현재 index 다음 index가 범위를 넘는 경우
+                if num[neg]>0:#현재 index가 음수가 아니면 음수 파트가 아니므로 그냥 break
+                    break
+                res=res+num[neg]
+                neg=neg-1
+                break
+            if num[neg]<0 and num[neg-1]<0:#현재 index와 다음 index 모두 음수인 경우 묶어서 곱하기
+                res=res+num[neg]*num[neg-1]
+                neg=neg-2
+            elif num[neg]<0 and num[neg-1]>0:#다음 index가 양수인 경우 현재 index 음수만 더하기
+                res=res+num[neg]
+                neg=neg-1
+                break
+            elif num[neg]<0 and num[neg-1]==0:#다음 index가 음수인 경우 현재 index의 음수를 0과 곱해서 없애는게
+                neg=neg-2#더 최대이므로 묶어서 곱하기
+                break
+            elif num[neg]>0:#현재 index가 양수이면 양수 파트이므로 break
+                break
+            elif num[neg]==0:#현재 index가 0이면 계산에 아무 영향 없으므로 그냥 index만 바꾸
+                neg=neg-1
+    print(res)
