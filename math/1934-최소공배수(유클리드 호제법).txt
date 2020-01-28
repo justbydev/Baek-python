@@ -1,0 +1,23 @@
+import sys
+
+testcase=int(sys.stdin.readline())
+res=[]
+for i in range(testcase):
+    A,B=map(int, sys.stdin.readline().split())
+    com=1
+    tmpA=A
+    tmpB=B
+    while True:
+        if tmpA==0:
+            com=tmpB
+            break
+        if tmpB==0:
+            com=tmpA
+            break
+        if tmpA>=tmpB:
+            tmpA=tmpA%tmpB
+        else:
+            tmpB=tmpB%tmpA
+    res.append(com*(A//com)*(B//com))
+for i in range(testcase):
+    print(res[i])
