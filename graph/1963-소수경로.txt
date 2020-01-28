@@ -1,0 +1,79 @@
+import sys
+
+
+T=int(sys.stdin.readline())
+prime=[1]*10001
+prime[0]=0
+prime[1]=0
+for a in range(2, 10000):
+    if prime[a]==1:
+        for j in range(a*2, 10000, a):
+            if prime[j]==1:
+                prime[j]=0
+p=[]
+for a in range(1000, 10000):
+    if prime[a]==1:
+        p.append(a)
+res=[]
+for _ in range(T):
+    count=0
+    queue=[]
+    st,ed=map(int, sys.stdin.readline().split())
+    if st==ed:
+        res.append(0)
+    else:
+        queue.append(st)
+        queue.append(-1)
+        visit=[st]
+        while True:
+            if len(queue)==0:
+                count=-1
+                break
+            now=queue.pop(0)
+            if now==-1:
+                if len(queue)==0:
+                    count=-1
+                    break
+                else:
+                    queue.append(-1)
+                    now=queue.pop(0)
+                    count=count+1
+            elif now==ed:
+                break
+            if now==ed:
+                break
+            each=list(map(int, str(now)))#각 자릿수 나누는 코드
+            tmp=now
+            for i in range(-each[0]+1, 10-each[0]):
+                if i==0:
+                    continue
+                if tmp+i*1000 in p and tmp+i*1000 not in queue and tmp+i*1000 not in visit:
+                    queue.append(tmp+i*1000)
+                    visit.append(tmp+i*1000)
+            tmp=now
+            for i in range(-each[1], 10-each[1]):
+                if i==0:
+                    continue
+                if tmp+i*100 in p and tmp+i*100 not in queue and tmp+i*100 not in visit:
+                    queue.append(tmp+i*100)
+                    visit.append(tmp+i*100)
+            tmp=now
+            for i in range(-each[2], 10-each[2]):
+                if i==0:
+                    continue
+                if tmp+i*10 in p and tmp+i*10 not in queue and tmp+i*10 not in visit:
+                    queue.append(tmp+i*10)
+                    visit.append(tmp+i*10)
+            tmp=now
+            for i in range(-each[3], 10-each[3]):
+                if i==0:
+                    continue
+                if tmp+i in p and tmp+i not in queue and tmp+i not in visit:
+                    queue.append(tmp+i)
+                    visit.append(tmp+i)
+        res.append(count)
+for i in range(T):
+    if res[i]==-1:
+        print('Impossible')
+    else:
+        print(res[i])
