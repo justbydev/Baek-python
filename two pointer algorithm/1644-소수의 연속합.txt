@@ -1,0 +1,44 @@
+import sys
+
+N=int(sys.stdin.readline())
+p=[1]*(N+1)
+p[0]=0
+p[1]=0
+for i in range(2, N+1):
+    if p[i]==1:
+        for j in range(i*2, N+1, i):
+            p[j]=0
+prime=[]
+for i in range(2, N+1):
+    if p[i]==1:
+        prime.append(i)
+
+if N==1:
+    print('0')
+elif N==2:
+    print('1')
+elif N==3:
+    print('1')
+else:
+    st=0
+    ed=0
+    count=0
+    now=prime[0]
+    while True:
+        if ed>=len(prime):
+            break
+        if now<N:
+            ed=ed+1
+            if ed<len(prime):
+                now=now+prime[ed]
+        elif now==N:
+            count=count+1
+            now=now-prime[st]
+            st=st+1
+            ed=ed+1
+            if ed<len(prime):
+                now=now+prime[ed]
+        elif now>N:
+            now=now-prime[st]
+            st=st+1
+    print(count)
