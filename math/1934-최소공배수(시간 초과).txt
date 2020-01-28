@@ -1,0 +1,15 @@
+import sys
+
+testcase=int(sys.stdin.readline())
+res=[]
+for i in range(testcase):
+    A,B=map(int, sys.stdin.readline().split())
+    com=1
+    small=min(A,B)
+    for i in range(1, small+1):
+        if A%i==0 and B%i==0:
+            if i>com:
+                com=i
+    res.append(com*(A//com)*(B//com))
+for i in range(testcase):
+    print(res[i])
