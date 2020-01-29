@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<stdlib.h>
+void dfs(char** board, int R, int C, int nowx, int nowy, int count, int** visit, int* same, int* res);
+int main(void) {
+	int R, C, i, j;
+	char buffer;
+	char** board;
+	int** visit;
+	int* same = (int*)calloc(26, sizeof(int));
+	int res;
+	int count = 1;
+	scanf("%d %d", &R, &C);
+	buffer = getchar();
+	board = (char**)malloc(sizeof(char*)*R);
+	visit = (int**)malloc(sizeof(int*)*R);
+	for (i = 0; i < R; i++) {
+		*(board + i) = (char*)malloc(sizeof(char)*C);
+		*(visit + i) = (int*)calloc(C, sizeof(int));
+	}
+	for (i = 0; i < R; i++) {
+		for (j = 0; j < C; j++) {
+			scanf("%c", &board[i][j]);
+		}
+		buffer = getchar();
+	}
+	same[board[0][0] - 'A'] = 1;
+	dfs(board, R, C, 0, 0, count, visit, same, &res);
+	printf("%d\n", res);
+	free(same);
+	for (i = 0; i < R; i++) {
+		free(*(board + i));
+	}
+	free(board);
+	return 0;
+}
+void dfs(char** board, int R, int C, int nowx, int nowy, int count, int** visit, int* same, int* res) {
+	int flag = 0;
+	if ((nowy - 1) >= 0 && visit[nowx][nowy - 1] == 0){
+		if (same[board[nowx][nowy - 1] - 'A'] == 0) {
+			flag = 1;
+			visit[nowx][nowy - 1] = 1;
+			same[board[nowx][nowy - 1] - 'A'] = 1;
+			dfs(board, R, C, nowx, nowy - 1, count + 1, visit, same, res);
+			visit[nowx][nowy - 1] = 0;
+			same[board[nowx][nowy - 1] - 'A'] = 0;
+		}
+	}
+	if ((nowx - 1) >= 0 && visit[nowx - 1][nowy] == 0) {
+		if (same[board[nowx - 1][nowy] - 'A'] == 0) {
+			flag = 1;
+			visit[nowx - 1][nowy] = 1;
+			same[board[nowx - 1][nowy] - 'A'] = 1;
+			dfs(board, R, C, nowx - 1, nowy, count + 1, visit, same, res);
+			visit[nowx - 1][nowy] = 0;
+			same[board[nowx - 1][nowy] - 'A'] = 0;
+		}
+	}
+	if ((nowy + 1) < C && visit[nowx][nowy + 1] == 0) {
+		if (same[board[nowx][nowy + 1] - 'A'] == 0) {
+			flag = 1;
+			visit[nowx][nowy + 1] = 1;
+			same[board[nowx][nowy + 1] - 'A'] = 1;
+			dfs(board, R, C, nowx, nowy + 1, count + 1, visit, same, res);
+			visit[nowx][nowy + 1] = 0;
+			same[board[nowx][nowy + 1] - 'A'] = 0;
+		}
+	}
+	if ((nowx + 1) < R && visit[nowx + 1][nowy] == 0) {
+		if (same[board[nowx + 1][nowy] - 'A'] == 0) {
+			flag = 1;
+			visit[nowx + 1][nowy] = 1;
+			same[board[nowx + 1][nowy] - 'A'] = 1;
+			dfs(board, R, C, nowx + 1, nowy, count + 1, visit, same, res);
+			visit[nowx + 1][nowy] = 0;
+			same[board[nowx + 1][nowy] - 'A'] = 0;
+		}
+	}
+	if (flag == 0) {
+		if ((*res) < count) {
+			(*res) = count;
+		}
+	}
+
+}

@@ -1,0 +1,52 @@
+import sys
+
+sys.setrecursionlimit(10**8)
+
+def dfs(board, R, C, nowx, nowy, count, visit, same, res):
+    flag=0
+    if nowy-1>=0 and [nowx,nowy-1] not in visit:
+        if board[nowx][nowy-1] not in same:
+            flag=1
+            visit.append([nowx, nowy-1])
+            same.append(board[nowx][nowy-1])
+            dfs(board, R, C, nowx, nowy-1, count+1, visit, same, res)
+            visit.pop()
+            same.pop()
+    if nowx-1>=0 and [nowx-1, nowy] not in visit:
+        if board[nowx-1][nowy] not in same:
+            flag=1
+            visit.append([nowx-1, nowy])
+            same.append(board[nowx-1][nowy])
+            dfs(board, R, C, nowx-1, nowy, count+1, visit, same, res)
+            visit.pop()
+            same.pop()
+    if nowy+1<C and [nowx, nowy+1] not in visit:
+        if board[nowx][nowy+1] not in same:
+            flag=1
+            visit.append([nowx, nowy+1])
+            same.append(board[nowx][nowy+1])
+            dfs(board, R, C, nowx, nowy+1, count+1, visit, same, res)
+            visit.pop()
+            same.pop()
+    if nowx+1<R and [nowx+1, nowy] not in visit:
+        if board[nowx+1][nowy] not in same:
+            flag=1
+            visit.append([nowx+1, nowy])
+            same.append(board[nowx+1][nowy])
+            dfs(board, R, C, nowx+1, nowy, count+1, visit, same, res)
+            visit.pop()
+            same.pop()
+    if flag==0:
+        res.append(count)
+
+R,C=map(int, sys.stdin.readline().split())
+board=[]
+for _ in range(R):
+    tmp=list(sys.stdin.readline())#띄어쓰기 없이 여러개 입력받을 시 각각의 요소를 리스트에 넣는 방법
+    tmp.pop()#마지막에 들어가는 '\n' 제
+    board.append(tmp)
+visit=[[0,0]]
+same=[board[0][0]]
+res=[]
+dfs(board, R, C, 0, 0, 1, visit, same, res)
+print(max(res))
