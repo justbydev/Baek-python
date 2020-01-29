@@ -1,0 +1,40 @@
+import sys
+
+
+N,M=map(int, sys.stdin.readline().split())
+num=list(map(int, sys.stdin.readline().split()))
+
+count=0
+st=0
+ed=0
+sm=num[0]
+while True:
+    if sm==M:
+        if ed==len(num)-1:#같은 상황에서 ed 못늘리고 st만 늘리면 어차피 계속 작은 수니까 그냥 break
+            count=count+1
+            break
+        else:
+            sm=sm-num[st]
+            st=st+1
+            ed=ed+1
+            count=count+1
+            sm=sm+num[ed]
+    elif sm<M:
+        ed=ed+1
+        if ed>len(num)-1:#원하는 값보다 작은 상황에서 ed를 늘려야 더 큰 수를 얻는데 그럴 수 없으니 break
+            break
+        else:
+            sm=sm+num[ed]
+    elif sm>M:
+        if st==ed:
+            if ed==len(num)-1:#원하는 값보다 크고 st,ed가 같은 상황에서 st, ed 둘다 늘려야 하는데 ed가 못그러니까 break
+                break
+            else:
+                sm=sm-num[st]
+                st=st+1
+                ed=ed+1
+                sm=sm+num[ed]
+        else:
+            sm=sm-num[st]
+            st=st+1
+print(count)
