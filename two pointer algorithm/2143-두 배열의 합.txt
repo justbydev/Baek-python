@@ -1,0 +1,69 @@
+import sys
+
+
+
+T=int(sys.stdin.readline())
+na=int(sys.stdin.readline())
+A=list(map(int, sys.stdin.readline().split()))
+nb=int(sys.stdin.readline())
+B=list(map(int, sys.stdin.readline().split()))
+resa=[]
+resb=[]
+for i in range(na):
+    sm=0
+    for j in range(i, na):
+        sm=sm+A[j]
+        resa.append(sm)
+for i in range(nb):
+    sm=0
+    for j in range(i, nb):
+        sm=sm+B[j]
+        resb.append(sm)
+resa.sort()
+resb.sort()
+count=0
+indexa=0
+indexb=len(resb)-1
+while True:
+    now=resa[indexa]
+    nowa=1
+    indexa=indexa+1
+    while True:
+        if indexa>=len(resa):
+            break
+        if now!=resa[indexa]:
+            break
+        elif now==resa[indexa]:
+            nowa=nowa+1
+            indexa=indexa+1
+    bflag=0
+    while True:
+        if indexb<0:
+            break
+        if now>T-resb[indexb]:
+            indexb=indexb-1
+        elif now==T-resb[indexb]:
+            bflag=1
+            break
+        elif now<T-resb[indexb]:
+            break
+    if indexb<0:
+        break
+    if bflag==1:
+        nowb=1
+        nw=resb[indexb]
+        indexb=indexb-1
+        while True:
+            if indexb<0:
+                break
+            if nw!=resb[indexb]:
+                break
+            elif nw==resb[indexb]:
+                nowb=nowb+1
+                indexb=indexb-1
+        count=count+nowa*nowb
+    if indexa>=len(resa):
+        break
+    if indexb<0:
+        break
+print(count)
