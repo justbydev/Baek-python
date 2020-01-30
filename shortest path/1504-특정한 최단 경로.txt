@@ -1,0 +1,65 @@
+import sys
+import heapq
+
+def dijkstra(graph, N, E, start, res):
+    visit=[0]*(N+1)
+    heap=[]
+    heapq.heappush(heap, [0, start])
+    res[start]=0
+    while True:
+        if len(heap)==0:
+            break
+        now=heapq.heappop(heap)
+        if visit[now[1]]==0:
+            visit[now[1]]=1
+            for i in range(len(graph[now[1]])):
+                if res[graph[now[1]][i][0]]==-1 or res[graph[now[1]][i][0]]>res[now[1]]+graph[now[1]][i][1]:
+                    res[graph[now[1]][i][0]]=res[now[1]]+graph[now[1]][i][1]
+                    heapq.heappush(heap, [res[graph[now[1]][i][0]], graph[now[1]][i][0]])
+
+N,E=map(int, sys.stdin.readline().split())
+graph=[]
+for _ in range(N+1):
+    graph.append([])
+for _ in range(E):
+    st,ed,w=map(int, sys.stdin.readline().split())
+    graph[st].append([ed, w])
+    graph[ed].append([st, w])
+one,two=map(int, sys.stdin.readline().split())
+
+one_res=0
+two_res=0
+oneflag=0
+twoflag=0
+res=[-1]*(N+1)
+dijkstra(graph, N, E, 1, res)
+one_res=one_res+res[one]
+two_res=two_res+res[two]
+if res[one]==-1:
+    oneflag=1
+if res[two]==-1:
+    twoflag=1
+res=[-1]*(N+1)
+dijkstra(graph, N, E, one, res)
+one_res=one_res+res[two]
+two_res=two_res+res[N]
+if res[two]==-1:
+    oneflag=1
+if res[N]==-1:
+    twoflag=1
+res=[-1]*(N+1)
+dijkstra(graph, N, E, two, res)
+two_res=two_res+res[one]
+one_res=one_res+res[N]
+if res[one]==-1:
+    twoflag=1
+if res[N]==-1:
+    oneflag=1
+if oneflag==1 and twoflag==1:
+    print(-1)
+elif oneflag==1 and twoflag==0:
+    print(two_res)
+elif oneflag==0 and twoflag==1:
+    print(one_res)
+elif oneflag==0 and twoflag==0:
+    print(min(one_res, two_res))
