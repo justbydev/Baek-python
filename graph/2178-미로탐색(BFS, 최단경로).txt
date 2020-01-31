@@ -1,0 +1,53 @@
+import sys
+
+
+def bfs(miro, N, M, visit, res):
+    queue=[[0,0]]
+    visit[0][0]=1
+    while True:
+        if len(queue)==0:
+            break
+        now=queue.pop(0)
+        if now[0]==N-1 and now[1]==M-1:
+            break
+        nowx=now[0]
+        nowy=now[1]
+        count=res[nowx][nowy]
+        if nowy-1>=0:
+            if miro[nowx][nowy-1]=='1' and visit[nowx][nowy-1]==0:
+                visit[nowx][nowy-1]=1
+                queue.append([nowx,nowy-1])
+                res[nowx][nowy-1]=count+1
+        if nowx-1>=0:
+            if miro[nowx-1][nowy]=='1' and visit[nowx-1][nowy]==0:
+                visit[nowx-1][nowy]=1
+                queue.append([nowx-1, nowy])
+                res[nowx-1][nowy]=count+1
+        if nowy+1<M:
+            if miro[nowx][nowy+1]=='1' and visit[nowx][nowy+1]==0:
+                visit[nowx][nowy+1]=1
+                queue.append([nowx, nowy+1])
+                res[nowx][nowy+1]=count+1
+        if nowx+1<N:
+            if miro[nowx+1][nowy]=='1' and visit[nowx+1][nowy]==0:
+                visit[nowx+1][nowy]=1
+                queue.append([nowx+1, nowy])
+                res[nowx+1][nowy]=count+1
+
+N,M=map(int, sys.stdin.readline().split())
+miro=[]
+for i in range(N):
+    tmp=list(sys.stdin.readline())
+    miro.append(tmp)
+visit=[]
+for i in range(N):
+    tmp=[0]*M
+    visit.append(tmp)
+count=1
+res=[]
+for i in range(N):
+    tmp=[0]*M
+    res.append(tmp)
+res[0][0]=1
+bfs(miro, N, M, visit, res)
+print(res[N-1][M-1])
