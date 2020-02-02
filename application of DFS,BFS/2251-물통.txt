@@ -1,0 +1,70 @@
+import sys
+
+sys.setrecursionlimit(10**8)
+def back(real, pastA, pastB, pastC):
+    real[0]=pastA
+    real[1]=pastB
+    real[2]=pastC
+def move(get, real, s, e, pastA, pastB, pastC):
+    if real[s]+real[e]>get:
+        real[s]=real[s]+real[e]-get
+        real[e]=get
+    elif real[s]+real[e]==get:
+        real[e]=get
+        real[s]=0
+    elif real[s]+real[e]<get:
+        real[e]=real[s]+real[e]
+        real[s]=0
+def water(A, B, C, real, res, flag, wt):
+    if real[0]==0 and real[2] not in res:
+        res.append(real[2])
+    if real[0]==0 and real[1]==0 and flag==1:
+        return 0
+    pastA=real[0]
+    pastB=real[1]
+    pastC=real[2]
+    if real[0]!=0:
+        move(B, real, 0, 1, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+        move(C, real, 0, 2, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+    if real[1]!=0:
+        move(A, real, 1, 0, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+        move(C, real, 1, 2, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+    if real[2]!=0:
+        move(A, real, 2, 0, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+        move(B, real, 2, 1, pastA, pastB, pastC)
+        if [real[0], real[1], real[2]] not in wt:
+            wt.append([real[0], real[1], real[2]])
+            water(A, B, C, real, res, 1, wt)
+        back(real, pastA, pastB, pastC)
+        
+        
+    
+A,B,C=map(int, sys.stdin.readline().split())
+res=[]
+real=[0, 0, C]
+wt=[[0, 0, C]]
+water(A, B, C, real, res, 0, wt)
+res.sort()
+for i in range(len(res)):
+    print(res[i], end=' ')
+print()
