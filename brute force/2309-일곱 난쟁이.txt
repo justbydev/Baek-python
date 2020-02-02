@@ -1,0 +1,23 @@
+import sys
+
+h=[]
+for i in range(9):
+    a=int(sys.stdin.readline())
+    h.append(a)
+s=sum(h)
+h.sort()
+flag=0
+for i in range(8):
+    for j in range(i+1, 9):
+        if s-h[i]-h[j]==100:
+            flag=1
+            one=i
+            two=j
+            break
+    if flag==1:
+        break
+for i in range(len(h)):
+    if i==one or i==two:
+        continue
+    else:
+        print(h[i])
