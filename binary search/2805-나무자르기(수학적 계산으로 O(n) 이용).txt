@@ -1,0 +1,21 @@
+import sys
+
+N,M=map(int, sys.stdin.readline().split())
+tree=list(map(int, sys.stdin.readline().split()))
+H=0
+tree.sort()
+total=sum(tree)
+nowindex=0
+while True:
+    now=tree[nowindex]
+    if total-now*N>M:
+        N=N-1
+        total=total-now
+        nowindex=nowindex+1
+    elif total-now*N==M:
+        H=now
+        break
+    elif total-now*N<M:
+        H=(total-M)//N
+        break
+print(H)
