@@ -1,0 +1,87 @@
+import sys
+
+def subsetsum_pizza(P, N, want, res):
+    subsum=[]
+    sm=0
+    count=0
+    total=sum(P)
+    for i in range(N):
+        sm+=P[i]
+        subsum.append(sm)
+        res.append(sm)
+        if sm==want:
+            count+=1
+    for i in range(1, N):
+        for j in range(i, N):
+            if subsum[j]-subsum[i-1]==want:
+                count+=1
+            elif subsum[j]-subsum[i-1]<want:
+                res.append(subsum[j]-subsum[i-1])
+            if j!=N-1:
+                if total-(subsum[j]-subsum[i-1])==want:
+                    count+=1
+                elif total-(subsum[j]-subsum[i-1])<want:
+                    res.append(total-(subsum[j]-subsum[i-1]))
+    return count
+                
+want=int(sys.stdin.readline())
+m,n=map(int, sys.stdin.readline().split())
+A=[]
+for _ in range(m):
+    t=int(sys.stdin.readline())
+    A.append(t)
+B=[]
+for _ in range(n):
+    t=int(sys.stdin.readline())
+    B.append(t)
+count=0
+resA=[]
+resB=[]
+count+=subsetsum_pizza(A, m, want, resA)
+count+=subsetsum_pizza(B, n, want, resB)
+if len(resA)!=0 and len(resB)!=0:
+    resA.sort()
+    resB.sort(reverse=True)
+    Aindex=0
+    Bindex=0
+    while True:
+        Acount=1
+        nowA=resA[Aindex]
+        Aindex+=1
+        while True:
+            if Aindex>=len(resA):
+                break
+            if resA[Aindex]==nowA:
+                Acount+=1
+                Aindex+=1
+            else:
+                break
+        Bcount=0
+        while True:
+            flag=0
+            if Bindex>=len(resB):
+                break
+            if nowA+resB[Bindex]>want:
+                Bindex+=1
+            elif nowA+resB[Bindex]<want:
+                break
+            elif nowA+resB[Bindex]==want:
+                Bcount+=1
+                Bindex+=1
+                flag=1
+                while True:
+                    if Bindex>=len(resB):
+                        break
+                    if nowA+resB[Bindex]!=want:
+                        break
+                    elif nowA+resB[Bindex]==want:
+                        Bcount+=1
+                        Bindex+=1
+            if flag==1:
+                break
+        count+=Acount*Bcount
+        if Aindex>=len(resA):
+            break
+        if Bindex>=len(resB):
+            break
+print(count)
