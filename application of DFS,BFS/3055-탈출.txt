@@ -1,0 +1,67 @@
+import sys
+
+def bfs(R, C, forest, x, y, water):
+    Squeue=[[x,y]]
+    Squeue.append([-1,-1])
+    count=0
+    ureca=0
+    xmove=1
+    visit=[[0]*C for _ in range(R)]
+    visit[x][y]=1
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while True:
+        while True:
+            nwater=water.pop(0)
+            if nwater[0]==-1 and nwater[1]==-1:
+                water.append([-1, -1])
+                break
+            for i in range(4):
+                if nwater[0]+dx[i]>=0 and nwater[0]+dx[i]<R and nwater[1]+dy[i]>=0 and nwater[1]+dy[i]<C:
+                    if forest[nwater[0]+dx[i]][nwater[1]+dy[i]]=='.':
+                        forest[nwater[0]+dx[i]][nwater[1]+dy[i]]='*'
+                        water.append([nwater[0]+dx[i], nwater[1]+dy[i]])
+        count+=1
+        xmove=1
+        while True:
+            now=Squeue.pop(0)
+            if now[0]==-1 and now[1]==-1:
+                Squeue.append([-1, -1])
+                break
+            for i in range(4):
+                if now[0]+dx[i]>=0 and now[0]+dx[i]<R and now[1]+dy[i]>=0 and now[1]+dy[i]<C:
+                    if forest[now[0]+dx[i]][now[1]+dy[i]]=='.' and visit[now[0]+dx[i]][now[1]+dy[i]]==0:
+                        Squeue.append([now[0]+dx[i], now[1]+dy[i]])
+                        visit[now[0]+dx[i]][now[1]+dy[i]]=1
+                        xmove=0
+                    elif forest[now[0]+dx[i]][now[1]+dy[i]]=='D':
+                        ureca=1
+                        xmove=0
+                        break
+        if xmove==1:
+            count=-1
+            break
+        if ureca==1:
+            break
+        if len(Squeue)==1:
+            break
+    return count
+R,C=map(int, sys.stdin.readline().split())
+forest=[list(sys.stdin.readline()) for _ in range(R)]
+water=[]
+x=0
+y=0
+for i in range(R):
+    for j in range(C):
+        if forest[i][j]=='S':
+            x=i
+            y=j
+            forest[i][j]='.'
+        elif forest[i][j]=='*':
+            water.append([i,j])
+water.append([-1, -1])
+res=bfs(R, C, forest, x, y, water)
+if res==-1:
+    print("KAKTUS")
+else:
+    print(res)
