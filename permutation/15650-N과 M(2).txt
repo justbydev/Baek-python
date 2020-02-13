@@ -1,0 +1,19 @@
+import sys
+from collections import deque
+
+def commute(num, N, M, res, count, st):
+    if count==M:
+        for a in res:
+            print(a, end=' ')
+        print()
+    elif st==N:
+        return
+    else:
+        res.append(num[st])
+        commute(num, N, M, res, count+1, st+1)
+        res.pop()
+        commute(num, N, M, res, count, st+1)
+N,M=map(int, sys.stdin.readline().split())
+num=[i for i in range(1, N+1)]
+res=deque()
+commute(num, N, M, res, 0, 0)
