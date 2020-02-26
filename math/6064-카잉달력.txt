@@ -1,0 +1,40 @@
+import sys
+
+
+testcase=int(sys.stdin.readline())
+for i in range(testcase):
+    M,N,x,y=map(int, sys.stdin.readline().split())
+    if M==N:
+        if x!=y:
+            print(-1)
+        else:
+            print(M)
+        continue
+    if x==y:
+        print(x)
+        continue
+    res=x
+    if x<=N:
+        first=x
+    else:
+        first=x%N
+        if first==0:
+            first=N
+    if first==y:
+        print(res)
+        continue
+    now=(first+M)%N
+    if now==0:
+        now=N
+    res+=M
+    while True:
+        if now==y:
+            print(res)
+            break
+        if now==first:
+            print(-1)
+            break
+        now=(now+M)%N
+        res+=M
+        if now==0:
+            now=N
