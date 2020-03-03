@@ -1,0 +1,13 @@
+import sys
+
+testcase=int(sys.stdin.readline())
+L=[[0,0] for _ in range(5001)]
+L[2][1]=L[4][0]=L[4][1]=1
+for i in range(6, 5001):
+    if i%2==0:
+        L[i][1]=(L[i-2][0]%1000000007+L[i-2][1]%1000000007)%1000000007
+        for j in range(2, i, 2):
+            L[i][0]+=(L[j][1]%1000000007*(L[i-j][0]%1000000007+L[i-j][1]%1000000007))%1000000007
+for _ in range(testcase):
+    num=int(sys.stdin.readline())
+    print((L[num][0]+L[num][1])%1000000007)
