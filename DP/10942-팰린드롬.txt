@@ -1,0 +1,22 @@
+import sys
+
+N=int(sys.stdin.readline())
+num=list(map(int, sys.stdin.readline().split()))
+palin=[[False]*N for _ in range(N)]
+inter=0
+for i in range(N):
+    for j in range(N-inter):
+        if inter==0:
+            palin[j][j]=True
+        elif inter==1:
+            palin[j][j+inter]=(num[j]==num[j+inter])
+        else:
+            palin[j][j+inter]=(num[j]==num[j+inter]) and palin[j+1][j+inter-1]
+    inter+=1
+M=int(sys.stdin.readline())
+for _ in range(M):
+    S,E=map(int, sys.stdin.readline().split())
+    if palin[S-1][E-1]==True:
+        print(1)
+    else:
+        print(0)
