@@ -1,0 +1,60 @@
+import sys
+from collections import deque
+
+def bfs(h, w, mp, key):
+    queue=deque()
+    visit=[[0]*(w+2) for _ in range(h+2)]
+    door=[deque() for _ in range(26)]
+    res=0
+    queue.append([0,0])
+    visit[0][0]=1
+    dx=[0,-1,0,1]
+    dy=[-1,0,1,0]
+    while len(queue):
+        now=queue.popleft()
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>h+1 or nowy<0 or nowy>w+1 or visit[nowx][nowy]==1 or mp[nowx][nowy]=='*':
+                continue
+            if mp[nowx][nowy]=='$':
+                res+=1
+                mp[nowx][nowy]='.'
+                visit[nowx][nowy]=1
+                queue.append([nowx,nowy])
+            elif mp[nowx][nowy]=='.':
+                visit[nowx][nowy]=1
+                queue.append([nowx,nowy])
+            elif ord(mp[nowx][nowy])>=ord('A') and ord(mp[nowx][nowy])<=ord('Z'):
+                if key[ord(mp[nowx][nowy])-ord('A')]==1:
+                    visit[nowx][nowy]=1
+                    mp[nowx][nowy]='.'
+                    queue.append([nowx, nowy])
+                else:
+                    door[ord(mp[nowx][nowy])-ord('A')].append([nowx, nowy])
+            elif ord(mp[nowx][nowy])>=ord('a') and ord(mp[nowx][nowy])<=ord('z'):
+                visit[nowx][nowy]=1
+                key[ord(mp[nowx][nowy])-ord('a')]=1
+                queue.append([nowx, nowy])
+                while len(door[ord(mp[nowx][nowy])-ord('a')]):
+                    queue.append(door[ord(mp[nowx][nowy])-ord('a')].popleft())
+    return res
+testcase=int(sys.stdin.readline())
+for _ in range(testcase):
+    h,w=map(int, sys.stdin.readline().split())
+    mp=[['.']*(w+2)]
+    for _ in range(h):
+        now=['.']
+        tmp=list(sys.stdin.readline())
+        tmp[w]='.'
+        now=now+tmp
+        mp.append(now)
+    mp.append(['.']*(w+2))
+    key=[0]*26
+    keylist=list(sys.stdin.readline())
+    if keylist[0]!='0':
+        for i in range(len(keylist)-1):
+            key[ord(keylist[i])-ord('a')]=1
+    print(bfs(h, w, mp, key))
+    mp.clear()
+    key.clear()
