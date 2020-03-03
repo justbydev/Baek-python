@@ -1,0 +1,64 @@
+import sys
+from collections import deque
+
+def bfs(h, w, mp, stx, sty):
+    queue=deque()
+    count=deque()
+    queue.append([stx,sty])
+    count.append(0)
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    visit=[[-1]*(w+2) for _ in range(h+2)]
+    visit[stx][sty]=0
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>h+1 or nowy<0 or nowy>w+1 or mp[nowx][nowy]=='*':
+                continue
+            if mp[nowx][nowy]=='.':
+                if visit[nowx][nowy]==-1 or visit[nowx][nowy]>cnt:
+                    visit[nowx][nowy]=cnt
+                    queue.appendleft([nowx, nowy])
+                    count.appendleft(cnt)
+                continue
+            if mp[nowx][nowy]=='#':
+                if visit[nowx][nowy]==-1 or visit[nowx][nowy]>cnt+1:
+                    visit[nowx][nowy]=cnt+1
+                    queue.append([nowx, nowy])
+                    count.append(cnt+1)
+                continue
+    return visit
+testcase=int(sys.stdin.readline())
+for _ in range(testcase):
+    h,w=map(int, sys.stdin.readline().split())
+    mp=[['.']*(w+2)]
+    for _ in range(h):
+        n=['.']
+        tmp=list(sys.stdin.readline())
+        tmp[w]='.'
+        n=n+tmp
+        mp.append(n)
+    mp.append(['.']*(w+2))
+    prisoner=[]
+    for i in range(h+2):
+        for j in range(w+2):
+            if mp[i][j]=='$':
+                prisoner.append([i,j])
+                mp[i][j]='.'
+    d1=bfs(h, w, mp, 0,0)
+    d2=bfs(h, w, mp, prisoner[0][0], prisoner[0][1])
+    d3=bfs(h, w, mp, prisoner[1][0], prisoner[1][1])
+    res=1000000
+    for i in range(h+2):
+        for j in range(w+2):
+            if mp[i][j]=='*':
+                continue
+            sm=d1[i][j]+d2[i][j]+d3[i][j]
+            if mp[i][j]=='#':
+                sm-=2
+            res=min(res, sm)
+    print(res)
+    mp.clear()
