@@ -1,0 +1,19 @@
+import sys
+import math
+
+Ax,Ay,Az,Bx,By,Bz,Cx,Cy,Cz=map(int, sys.stdin.readline().split())
+AB=math.sqrt((Bx-Ax)**2+(By-Ay)**2+(Bz-Az)**2)
+BC=math.sqrt((Bx-Cx)**2+(By-Cy)**2+(Bz-Cz)**2)
+AC=math.sqrt((Cx-Ax)**2+(Cy-Ay)**2+(Cz-Az)**2)
+if AC+BC==AB:
+    zero=0
+    print("%.10f" %(zero))
+
+elif AC**2>AB**2+BC**2:
+    print("%.10f" %(BC))
+elif BC**2>AC**2+AB**2:
+    print("%.10f" %(AC))
+else:
+    s=(AB+BC+AC)/2
+    area=math.sqrt(s*(s-AB)*(s-BC)*(s-AC))
+    print("%.10f" %(2*area/AB))
