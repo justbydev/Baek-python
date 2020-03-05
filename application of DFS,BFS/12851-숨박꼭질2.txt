@@ -1,0 +1,35 @@
+import sys
+from collections import deque
+def bfs(N, K, time, res):
+    queue=deque()
+    queue.append([N, 0])
+    visit=[0]*110001
+    while queue:
+        now=queue.popleft()
+        if now[0]==K:
+            res[0]+=1
+            time[0]=now[1]
+            continue
+        if time[0]!=-1 and time[0]<now[1]:
+            break
+        if now[0]-1>=0:
+            if visit[now[0]-1]==0 or visit[now[0]-1]==now[1]+1:
+                visit[now[0]-1]=now[1]+1
+                queue.append([now[0]-1, now[1]+1])
+        if now[0]+1<=110000:
+            if visit[now[0]+1]==0 or visit[now[0]+1]==now[1]+1:
+                visit[now[0]+1]=now[1]+1
+                queue.append([now[0]+1, now[1]+1])
+        if now[0]*2<=110000:
+            if visit[now[0]*2]==0 or visit[now[0]*2]==now[1]+1:
+                visit[now[0]*2]=now[1]+1
+                queue.append([now[0]*2, now[1]+1])
+        
+    
+
+N,K=map(int, sys.stdin.readline().split())
+time=[-1]
+res=[0]
+bfs(N,K, time, res)
+print(time[0])
+print(res[0])
