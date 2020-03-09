@@ -1,0 +1,120 @@
+import sys
+from collections import deque
+
+
+def move(N, M, board, move, ntmove, stp, dr, flag):
+    if flag==0:
+        while True:
+            if board[move][ntmove]=='#' or (move==stp[0] and ntmove==stp[1]):
+                move=move-dr
+                break
+            if board[move][ntmove]=='O':
+                return -1
+            move=move+dr
+    else:
+        while True:
+            if board[ntmove][move]=='#' or (ntmove==stp[0] and move==stp[1]):
+                move=move-dr
+                break
+            if board[ntmove][move]=='O':
+                return -1
+            move=move+dr
+    return move
+def bfs(N, M, board, rx, ry, bx, by):
+    queue=deque()
+    queue2=deque()
+    count=deque()
+    queue.append([rx, ry])
+    queue2.append([bx, by])
+    count.append(0)
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while queue and queue2:
+        nowr=queue.popleft()
+        nowb=queue2.popleft()
+        cnt=count.popleft()
+        if cnt>9:
+            return -1
+        for i in range(4):
+            nxr=[nowr[0], nowr[1]]
+            nxb=[nowb[0], nowb[1]]
+            r=b=0
+            if dx[i]==0 and dy[i]<0:
+                if nowr[1]<=nowb[1]:
+                    r=move(N, M, board, nxr[1], nxr[0], nxb, -1, 1)
+                    nxr[1]=r
+                    b=move(N, M, board, nxb[1], nxb[0], nxr, -1, 1)
+                    if b!=-1:
+                        nxb[1]=b
+                else:
+                    b=move(N, M, board, nxb[1], nxb[0], nxr, -1, 1)
+                    nxb[1]=b
+                    r=move(N, M, board, nxr[1], nxr[0], nxb, -1, 1)
+                    if r!=-1:
+                        nxr[1]=r
+            elif dx[i]==0 and dy[i]>0:
+                if nowr[1]<=nowb[1]:
+                    b=move(N, M, board, nxb[1], nxb[0], nxr, 1, 1)
+                    nxb[1]=b
+                    r=move(N, M, board, nxr[1], nxr[0], nxb, 1, 1)
+                    if r!=-1:
+                        nxr[1]=r
+                else:
+                    r=move(N, M, board, nxr[1], nxr[0], nxb, 1, 1)
+                    nxr[1]=r
+                    b=move(N, M, board, nxb[1], nxb[0], nxr, 1, 1)
+                    if b!=-1:
+                        nxb[1]=b
+            elif dx[i]<0 and dy[i]==0:
+                if nowr[0]<=nowb[0]:
+                    r=move(N, M, board, nxr[0], nxr[1], nxb, -1, 0)
+                    nxr[0]=r
+                    b=move(N, M, board, nxb[0], nxb[1], nxr, -1, 0)
+                    if b!=-1:
+                        nxb[0]=b
+                else:
+                    b=move(N, M, board, nxb[0], nxb[1], nxr, -1, 0)
+                    nxb[0]=b
+                    r=move(N, M, board, nxr[0], nxr[1], nxb, -1, 0)
+                    if r!=-1:
+                        nxr[0]=r
+            elif dx[i]>0 and dy[i]==0:
+                if nowr[0]<=nowb[0]:
+                    b=move(N, M, board, nxb[0], nxb[1], nxr, 1, 0)
+                    nxb[0]=b
+                    r=move(N, M, board, nxr[0], nxr[1], nxb, 1, 0)
+                    if r!=-1:
+                        nxr[0]=r
+                else:
+                    r=move(N, M, board, nxr[0], nxr[1], nxb, 1, 0)
+                    nxr[0]=r
+                    b=move(N, M, board, nxb[0], nxb[1], nxr, 1, 0)
+                    if b!=-1:
+                        nxb[0]=b
+            if r==-1 and b!=-1:
+                return cnt+1
+            if b==-1 or (nowr[0]==nxr[0] and nowr[1]==nxr[1] and nowb[0]==nxb[0] and nowb[1]==nxb[1]):
+                continue
+            queue.append([nxr[0], nxr[1]])
+            queue2.append([nxb[0], nxb[1]])
+            count.append(cnt+1)
+    return -1
+            
+    
+    
+N,M=map(int, sys.stdin.readline().split())
+board=[]
+for _ in range(N):
+    board.append(list(sys.stdin.readline().rstrip()))
+rx=ry=bx=by=0
+for i in range(N):
+    for j in range(M):
+        if board[i][j]=='R':
+            rx=i
+            ry=j
+            board[i][j]='.'
+        if board[i][j]=='B':
+            bx=i
+            by=j
+            board[i][j]='.'
+print(bfs(N, M, board, rx, ry, bx, by))
