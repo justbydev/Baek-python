@@ -1,0 +1,48 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+
+def dfs(N, K, visit, res):
+    queue=deque()
+    count=deque()
+    queue.append(N)
+    count.append(0)
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        if now==K:
+            res[0]=cnt
+            return
+        if now-1>=0 and visit[now-1]==-1:
+            visit[now-1]=now
+            queue.append(now-1)
+            count.append(cnt+1)
+        if now+1<=210000 and visit[now+1]==-1:
+            visit[now+1]=now
+            queue.append(now+1)
+            count.append(cnt+1)
+        if now*2<=210000 and visit[now*2]==-1:
+            visit[now*2]=now
+            queue.append(now*2)
+            count.append(cnt+1)
+N,K=map(int, sys.stdin.readline().split())
+visit=[-1]*210001
+res=[0]
+if N==K:
+    print(0)
+    print(N)
+else:
+    dfs(N, K, visit, res)
+    print(res[0])
+    road=deque()
+    road.appendleft(K)
+    now=visit[K]
+    while True:
+        if now==N:
+            road.appendleft(now)
+            break
+        road.appendleft(now)
+        now=visit[now]
+    for i in range(len(road)):
+        print(road[i], end=' ')
+    print()
