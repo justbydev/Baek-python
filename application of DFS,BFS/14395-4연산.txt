@@ -1,0 +1,55 @@
+import sys
+import math
+from collections import deque
+sys.setrecursionlimit(10**8)
+
+def bfs(s, t, visit):
+    queue=deque()
+    queue.append(s)
+    while queue:
+        now=queue.popleft()
+        if not visit.get(now*now) and now*now<=1000000001:
+            if now*now==t:
+                visit[now*now]='*'
+                return 1
+            visit[now*now]='*'
+            queue.append(now*now)
+        if not visit.get(now+now) and now+now<=1000000001:
+            if now+now==t:
+                visit[now+now]='+'
+                return 1
+            visit[now+now]='+'
+            queue.append(now+now)
+        if not visit.get(now//now):
+            if now//now==t:
+                visit[now//now]='/'
+                return 1
+            visit[now//now]='/'
+            queue.append(now//now)
+    return -1
+s,t=map(int, sys.stdin.readline().split())
+if s==t:
+    print(0)
+elif t==0:
+    print('-')
+else:
+    visit=dict()
+    r=bfs(s, t, visit)
+    if r==-1:
+        print(-1)
+    else:
+        real=deque()
+        now=t
+        while True:
+            real.appendleft(visit[now])
+            if visit[now]=='+':
+                now=now//2
+            elif visit[now]=='*':
+                now=math.sqrt(now)
+            elif visit[now]=='/':
+                break
+            if now==s:
+                break
+        for i in range(len(real)):
+            print(real[i], end='')
+        print()
