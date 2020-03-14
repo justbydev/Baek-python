@@ -1,0 +1,44 @@
+import sys
+
+sys.setrecursionlimit(10**8)
+
+def sel(select, team, st, cnt, N, res):
+    if cnt==N//2:
+        sm=0
+        resdic=dict()
+        for i in range(cnt):
+            resdic[select[i]]=1
+            for j in range(i+1, cnt):
+                sm+=team[select[i]][select[j]]
+                sm+=team[select[j]][select[i]]
+        another=[]
+        for i in range(N):
+            if not resdic.get(i):
+                another.append(i)
+        ansm=0
+        for i in range(cnt):
+            for j in range(i+1, cnt):
+                ansm+=team[another[i]][another[j]]
+                ansm+=team[another[j]][another[i]]
+        if res[0]==-1:
+            res[0]=abs(sm-ansm)
+        else:
+            res[0]=min(res[0], abs(sm-ansm))
+    
+    else:
+        for i in range(st, N):
+            select.append(i)
+            sel(select, team, i+1, cnt+1, N, res)
+            select.pop()
+        
+N=int(sys.stdin.readline())
+team=[]
+for _ in range(N):
+    team.append(list(map(int, sys.stdin.readline().split())))
+select=[]
+res=[-1]
+for i in range(N):
+    select.append(i)
+    sel(select, team, i+1, 1, N, res)
+    select.pop()
+print(res[0])
