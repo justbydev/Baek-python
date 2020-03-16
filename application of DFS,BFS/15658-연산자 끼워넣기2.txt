@@ -1,0 +1,46 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+def add(one, two):
+    return one+two
+def minus(one, two):
+    return one-two
+def mult(one, two):
+    return one*two
+def div(one, two):
+    if one<0:
+        one=-one
+        r=one//two
+        r=-r
+    else:
+        r=one//two
+    return r
+def dfs(N, num, cal, mx, mn, sm, cnt):
+    if cnt==N-1:
+        mx[0]=max(mx[0], sm)
+        mn[0]=min(mn[0], sm)
+    else:
+        if cal[0]>0:
+            cal[0]-=1
+            dfs(N, num, cal, mx, mn, add(sm, num[cnt+1]), cnt+1)
+            cal[0]+=1
+        if cal[1]>0:
+            cal[1]-=1
+            dfs(N, num, cal, mx, mn, minus(sm, num[cnt+1]), cnt+1)
+            cal[1]+=1
+        if cal[2]>0:
+            cal[2]-=1
+            dfs(N, num, cal, mx, mn, mult(sm, num[cnt+1]), cnt+1)
+            cal[2]+=1
+        if cal[3]>0:
+            cal[3]-=1
+            dfs(N, num, cal, mx, mn, div(sm, num[cnt+1]), cnt+1)
+            cal[3]+=1
+N=int(sys.stdin.readline())
+num=list(map(int, sys.stdin.readline().split()))
+cal=list(map(int, sys.stdin.readline().split()))
+mx=[-1000000001]
+mn=[1000000001]
+dfs(N, num, cal, mx, mn, num[0], 0)
+print(mx[0])
+print(mn[0])
