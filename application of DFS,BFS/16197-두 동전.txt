@@ -1,0 +1,54 @@
+import sys
+from collections import deque
+
+def bfs(N, M, board, ox, oy, tx, ty):
+    queue=deque()
+    count=deque()
+    queue.append([ox,oy,tx,ty])
+    count.append(0)
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        if cnt>=10:
+            return -1
+        for i in range(4):
+            onex=now[0]+dx[i]
+            oney=now[1]+dy[i]
+            twox=now[2]+dx[i]
+            twoy=now[3]+dy[i]
+            if (onex<0 or onex>=N or oney<0 or oney>=M) and (twox>=0 and twox<N and twoy>=0 and twoy<M):
+                return cnt+1
+            if (twox<0 or twox>=N or twoy<0 or twoy>=M) and (onex>=0 and onex<N and oney>=0 and oney<M):
+                return cnt+1
+            if (onex<0 or onex>=N or oney<0 or oney>=M) and (twox<0 or twox>=N or twoy<0 or twoy>=M):
+                continue
+            if board[onex][oney]=='#' and board[twox][twoy]=='#':
+                continue
+            if board[onex][oney]=='#':
+                queue.append([now[0], now[1], twox, twoy])
+                count.append(cnt+1)
+            elif board[twox][twoy]=='#':
+                queue.append([onex, oney, now[2], now[3]])
+                count.append(cnt+1)
+            else:
+                queue.append([onex, oney, twox, twoy])
+                count.append(cnt+1)
+    return -1#사방이 벽이어서 그냥 이동자체를 안해 queue가 비어서 끝나는 경우도 있으므로(10번 채우는 것이 아니라)
+N,M=map(int, sys.stdin.readline().split())
+board=[]
+for _ in range(N):
+    board.append(list(sys.stdin.readline().rstrip()))
+ox=oy=tx=ty=-1
+for i in range(N):
+    for j in range(M):
+        if board[i][j]=='o':
+            if ox==-1:
+                ox=i
+                oy=j
+            else:
+                tx=i
+                ty=j
+                break
+print(bfs(N, M, board, ox, oy, tx, ty))
