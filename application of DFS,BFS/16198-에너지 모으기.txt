@@ -1,0 +1,17 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, nowN, w, res, cnt, sm):
+    if cnt==N-2:
+        res[0]=max(res[0], sm)
+    else:
+        for i in range(1, nowN-1):
+            now=w[i-1]*w[i+1]
+            temp=w[i]
+            w.pop(i)
+            dfs(N, nowN-1, w, res, cnt+1, sm+now)
+            w.insert(i, temp)
+N=int(sys.stdin.readline())
+w=list(map(int, sys.stdin.readline().split()))
+res=[-1]
+dfs(N, N, w, res, 0, 0)
+print(res[0])
