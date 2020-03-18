@@ -1,0 +1,62 @@
+import sys
+import heapq
+from collections import deque
+
+def bfs(N, sea, x, y, res):
+    size=2
+    cnt=0
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while True:
+        queue=deque()
+        queue.append([x,y,0])
+        visit=[[0]*N for _ in range(N)]
+        flag=0
+        eat=[]
+        eatcnt=0
+        while queue:
+            now=queue.popleft()
+            if eatcnt!=0 and now[2]+1>eatcnt:
+                break
+            for i in range(4):
+                nowx=now[0]+dx[i]
+                nowy=now[1]+dy[i]
+                if nowx<0 or nowx>=N or nowy<0 or nowy>=N or sea[nowx][nowy]>size or visit[nowx][nowy]==1:
+                    continue
+                if sea[nowx][nowy]!=0 and sea[nowx][nowy]<size:
+                    if flag==0:
+                        flag=1
+                        eatcnt=now[2]+1
+                        heapq.heappush(eat, [nowx, nowy])
+                    elif eatcnt==now[2]+1:
+                        heapq.heappush(eat, [nowx, nowy])
+                    continue
+                queue.append([nowx, nowy, now[2]+1])
+                visit[nowx][nowy]=1
+        if flag==0:
+            break
+        else:
+            eatnow=heapq.heappop(eat)
+            x=eatnow[0]
+            y=eatnow[1]
+            sea[x][y]=0
+            cnt+=1
+            res[0]+=eatcnt
+            if size==cnt:
+                cnt=0
+                size+=1
+N=int(sys.stdin.readline())
+sea=[]
+for _ in range(N):
+    sea.append(list(map(int, sys.stdin.readline().split())))
+x=y=-1
+for i in range(N):
+    for j in range(N):
+        if sea[i][j]==9:
+            x=i
+            y=j
+            sea[i][j]=0
+            break
+res=[0]
+bfs(N, sea, x, y, res)
+print(res[0])
