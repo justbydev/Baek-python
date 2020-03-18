@@ -1,0 +1,36 @@
+import sys
+from collections import deque
+
+def bfs(N, M, ladder, snake):
+    queue=deque()
+    visit=[0]*101
+    queue.append([1, 0])
+    while queue:
+        now=queue.popleft()
+        for i in range(1, 7):
+            if now[0]+i>100 or visit[now[0]+i]==1:
+                continue
+            if now[0]+i==100:
+                return now[1]+1
+            if ladder.get(now[0]+i):
+                queue.append([ladder[now[0]+i], now[1]+1])
+                visit[now[0]+i]=1
+                visit[ladder[now[0]+i]]=1
+            elif snake.get(now[0]+i):
+                queue.append([snake[now[0]+i], now[1]+1])
+                visit[now[0]+i]=1
+                visit[snake[now[0]+i]]=1
+            else:
+                queue.append([now[0]+i, now[1]+1])
+                visit[now[0]+i]=1
+            
+N,M=map(int, sys.stdin.readline().split())
+ladder=dict()
+for _ in range(N):
+    x,y=map(int, sys.stdin.readline().split())
+    ladder[x]=y
+snake=dict()
+for _ in range(M):
+    u,v=map(int, sys.stdin.readline().split())
+    snake[u]=v
+print(bfs(N, M, ladder, snake))
