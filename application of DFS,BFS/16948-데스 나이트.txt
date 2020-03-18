@@ -1,0 +1,26 @@
+import sys
+from collections import deque
+
+def bfs(N, r1, c1, r2, c2):
+    queue=deque()
+    queue.append([r1,c1,0])
+    visit=[[0]*N for _ in range(N)]
+    visit[r1][c1]=1
+    while queue:
+        now=queue.popleft()
+        for dx,dy in (-2,-1), (-2,1), (0,-2), (0,2), (2,-1), (2,1):
+            nowx=now[0]+dx
+            nowy=now[1]+dy
+            if nowx==r2 and nowy==c2:
+                return now[2]+1
+            if nowx<0 or nowx>=N or nowy<0 or nowy>=N or visit[nowx][nowy]==1:
+                continue
+            queue.append([nowx, nowy, now[2]+1])
+            visit[nowx][nowy]=1
+    return -1
+N=int(sys.stdin.readline())
+r1,c1,r2,c2=map(int, sys.stdin.readline().split())
+if r1==r2 and c1==c2:
+    print(0)
+else:
+    print(bfs(N, r1, c1, r2, c2))
