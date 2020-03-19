@@ -1,0 +1,34 @@
+import sys
+import copy
+from collections import deque
+
+def bfs(mp):
+    queue=deque()
+    cnt=0
+    queue.append([7,0])
+    while queue:
+        l=len(queue)
+        for _ in range(l):
+            now=queue.popleft()
+            for dx,dy in (0,-1),(-1,-1),(-1,0),(-1,1),(0,1),(1,1),(1,0),(1,-1),(0,0):
+                nowx=now[0]+dx
+                nowy=now[1]+dy
+                if nowx==0:
+                    return 1
+                if nowx<0 or nowx>=8 or nowy<0 or nowy>=8 or mp[nowx][nowy]=='#' or mp[nowx-1][nowy]=='#':
+                    continue
+                queue.append([nowx, nowy])
+        if cnt<9:
+            for i in range(7,0,-1):
+                mp[i]=copy.deepcopy(mp[i-1])#리스트 복사시 무조건 deepcopy해야 같은 주소 같이 수정되는 거 방지가
+            for j in range(8):
+                mp[0][j]='.'
+            cnt+=1
+        else:
+            return 1
+    return 0
+                
+mp=[]
+for _ in range(8):
+    mp.append(list(sys.stdin.readline().rstrip()))
+print(bfs(mp))
