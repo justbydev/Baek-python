@@ -1,0 +1,57 @@
+import sys
+from collections import deque
+
+def bfs(N, M, sx, sy, group, mp, c, count):
+    queue=deque()
+    queue2=deque()
+    visit=dict()
+    cnt=1
+    queue.append([sx,sy])
+    visit[(sx,sy)]=1
+    dx=[0,-1,0,1]
+    dy=[-1,0,1,0]
+    while queue:
+        now=queue.popleft()
+        queue2.append([now[0], now[1]])
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=N or nowy<0 or nowy>=M or visit.get((nowx,nowy)) or mp[nowx][nowy]=='1':
+                continue
+            queue.append([nowx, nowy])
+            visit[(nowx,nowy)]=1
+            cnt+=1
+    while queue2:
+        now=queue2.popleft()
+        group[now[0]][now[1]]=cnt
+        c[now[0]][now[1]]=count
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(sys.stdin.readline().rstrip()))
+group=[[0]*M for _ in range(N)]
+c=[[0]*M for _ in range(N)]
+count=1
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]=='0' and group[i][j]==0:
+            bfs(N, M, i, j, group, mp, c, count)
+            count+=1
+dx=[0,-1,0,1]
+dy=[-1,0,1,0]
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]=='0':
+            print(0, end='')
+        else:
+            sm=1
+            v=dict()
+            for k in range(4):
+                nowx=i+dx[k]
+                nowy=j+dy[k]
+                if nowx<0 or nowx>=N or nowy<0 or nowy>=M or v.get(c[nowx][nowy]):
+                    continue
+                sm+=group[nowx][nowy]
+                v[c[nowx][nowy]]=1
+            print(sm%10, end='')
+    print()
