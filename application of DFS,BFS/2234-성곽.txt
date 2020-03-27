@@ -1,0 +1,64 @@
+import sys
+from collections import deque
+def changetwo(num):
+    dr=[0,0,0,0]
+    index=3
+    while True:
+        dr[index]=num%2
+        num=num//2
+        if num==0:
+            break
+        index-=1
+    return dr
+    
+def bfs(n, m, stx, sty, room, visit, roomcnt, rtotal):
+    queue=deque()
+    v=deque()
+    dx=[1, 0, -1, 0]
+    dy=[0, 1, 0, -1]
+    cnt=1
+    queue.append([stx, sty])
+    visit[stx][sty]=1
+    v.append([stx, sty])
+    while queue:
+        now=queue.popleft()
+        twobit=changetwo(room[now[0]][now[1]])
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=m or nowy<0 or nowy>=n or visit[nowx][nowy]!=0 or twobit[i]==1:
+                continue
+            queue.append([nowx, nowy])
+            visit[nowx][nowy]=1
+            v.append([nowx, nowy])
+            cnt+=1
+    while v:
+        now=v.popleft()
+        visit[now[0]][now[1]]=cnt
+        roomcnt[now[0]][now[1]]=rtotal
+    return cnt
+n,m=map(int, sys.stdin.readline().split())
+room=[]
+for _ in range(m):
+    room.append(list(map(int, sys.stdin.readline().split())))
+visit=[[0]*n for _ in range(m)]
+rtotal=0
+rcnt=0
+roomcnt=[[0]*n for _ in range(m)]
+for i in range(m):
+    for j in range(n):
+        if visit[i][j]==0:
+            rcnt=max(rcnt, bfs(n, m, i, j, room, visit, roomcnt, rtotal))
+            rtotal+=1
+print(rtotal)
+print(rcnt)
+sm=0
+for i in range(m):
+    for j in range(n):
+        if j!=n-1:
+            if roomcnt[i][j]!=roomcnt[i][j+1]:
+                sm=max(sm, visit[i][j]+visit[i][j+1])
+        if i!=m-1:
+            if roomcnt[i][j]!=roomcnt[i+1][j]:
+                sm=max(sm, visit[i][j]+visit[i+1][j])
+print(sm)
