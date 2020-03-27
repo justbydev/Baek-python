@@ -1,0 +1,25 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+def dfs(N, M, nx, ny, mp, res, visit, sm):
+    dx=[0, 1, 0]
+    dy=[-1, 0, 1]
+    for i in range(3):
+        nowx=nx+dx[i]
+        nowy=ny+dy[i]
+        if nowx<0 or nowx>=M or nowy<0 or nowy>=N or visit[nowx][nowy]==1:
+            continue
+        if nowx==M-1 and nowy==N-1:
+            res[0]=max(res[0], sm+mp[nowx][nowy])
+            continue
+        visit[nowx][nowy]=1
+        dfs(N, M, nowx, nowy, mp, res, visit, sm+mp[nowx][nowy])
+        visit[nowx][nowy]=0
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+res=[-100000001]
+visit=[[0]*M for _ in range(N)]
+dfs(N, M, 0, 0, mp, res, visit, mp[0][0])
+print(res[0])
