@@ -1,0 +1,78 @@
+import sys
+from collections import deque
+
+def bfs(R, C, stx, sty, visit, mir):
+    queue=deque()
+    queue.append([stx, sty])
+    visit[stx][sty]=1
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while queue:
+        now=queue.popleft()
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=R or nowy<0 or nowy>=C or visit[nowx][nowy]==1 or visit[nowx][nowy]==0 or mir[nowx][nowy]=='.':
+                continue
+            queue.append([nowx, nowy])
+            visit[nowx][nowy]=1
+R,C=map(int, sys.stdin.readline().split())
+mir=[]
+for _ in range(R):
+    mir.append(list(sys.stdin.readline().rstrip()))
+throw=int(sys.stdin.readline())
+th=list(map(int, sys.stdin.readline().split()))
+for i in range(throw):
+    now=R-th[i]
+    flag=0
+    if i%2==0:
+        for j in range(C):
+            if mir[now][j]=='x':
+                mir[now][j]='.'
+                flag=1
+                break
+    else:
+        for j in range(C-1, -1, -1):
+            if mir[now][j]=='x':
+                mir[now][j]='.'
+                flag=1
+                break
+    if flag==1:
+        visit=[[0]*C for _ in range(R)]
+        for j in range(R):
+            for k in range(C):
+                if mir[j][k]=='x':
+                    visit[j][k]=2
+        for j in range(C):
+            if mir[R-1][j]=='x' and visit[R-1][j]==2:
+                bfs(R, C, R-1, j, visit, mir)
+        sm=-1
+        for j in range(C):
+            for k in range(R-1, -1, -1):
+                if visit[k][j]==2:
+                    l=k+1
+                    cnt=1
+                    while True:
+                        if mir[l][j]=='x' and visit[l][j]==1:
+                            l-=1
+                            cnt-=1
+                            break
+                        if l==R-1:
+                            break
+                        l+=1
+                        cnt+=1
+                    if cnt==0:
+                        continue
+                    if sm==-1:
+                        sm=cnt
+                    else:
+                        sm=min(sm, cnt)
+        for j in range(C):
+            for k in range(R-1, -1, -1):
+                if visit[k][j]==2:
+                    mir[k][j]='.'
+                    mir[k+sm][j]='x'
+for i in range(R):
+    for j in range(C):
+        print(mir[i][j], end='')
+    print()
