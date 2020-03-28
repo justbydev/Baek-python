@@ -1,0 +1,34 @@
+import sys
+sys.setrecursionlimit(10**8)
+def permut(N, M, v, st, cnt, res, now):
+    if cnt==3:
+        res[0]+=1
+    elif st==N+1:
+        return
+    else:
+        for i in range(st, N+1):
+            if cnt==0:
+                now.append(i)
+                permut(N, M, v, i+1, cnt+1, res, now)
+                now.pop()
+            elif cnt==1:
+                if v[now[0]][i]==0:
+                    now.append(i)
+                    permut(N, M, v, i+1, cnt+1, res, now)
+                    now.pop()
+            elif cnt==2:
+                if v[now[0]][i]==0 and v[now[1]][i]==0:
+                    now.append(i)
+                    permut(N, M, v, i+1, cnt+1, res, now)
+                    now.pop()
+
+                
+N,M=map(int, sys.stdin.readline().split())
+v=[[0]*(N+1) for _ in range(N+1)]
+for i in range(M):
+    st,ed=map(int, sys.stdin.readline().split())
+    v[st][ed]=1
+    v[ed][st]=1
+res=[0]
+permut(N, M, v, 1, 0, res, [])
+print(res[0])
