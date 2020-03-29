@@ -1,0 +1,146 @@
+import sys
+
+C,P=map(int, sys.stdin.readline().split())
+height=list(map(int, sys.stdin.readline().split()))
+res=0
+if P==1:
+    res+=C
+    if C>=4:
+        st=0
+        ed=3
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]==height[st+2]==height[st+3]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==2:
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==3:
+    if C>=3:
+        st=0
+        ed=2
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1] and height[st+1]+1==height[st+2]:
+                res+=1
+            st+=1
+            ed+=1
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]-1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==4:
+    if C>=3:
+        st=0
+        ed=2
+        while True:
+            if ed>=C:
+                break
+            if height[st+1]==height[st+2] and height[st]-1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]+1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==5:
+    if C>=3:
+        st=0
+        ed=2
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]==height[st+2]:
+                res+=1
+            if height[st]==height[st+2] and height[st]-1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]+1==height[st+1]:
+                res+=1
+            if height[st]-1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==6:
+    if C>=3:
+        st=0
+        ed=2
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]==height[st+2]:
+                res+=1
+            if height[st+1]==height[st+2] and height[st]+1==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]:
+                res+=1
+            if height[st]-2==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+elif P==7:
+    if C>=3:
+        st=0
+        ed=2
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]==height[st+2]:
+                res+=1
+            if height[st]==height[st+1] and height[st+1]-1==height[st+2]:
+                res+=1
+            st+=1
+            ed+=1
+    if C>=2:
+        st=0
+        ed=1
+        while True:
+            if ed>=C:
+                break
+            if height[st]==height[st+1]:
+                res+=1
+            if height[st]+2==height[st+1]:
+                res+=1
+            st+=1
+            ed+=1
+print(res)
