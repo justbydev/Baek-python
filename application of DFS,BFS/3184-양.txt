@@ -1,0 +1,43 @@
+import sys
+from collections import deque
+def bfs(R, C, mp, sheep, wolf, stx, sty, visit):
+    queue=deque()
+    shcnt=0
+    wfcnt=0
+    dx=[0,-1,0,1]
+    dy=[-1,0,1,0]
+    if mp[stx][sty]=='v':
+        wfcnt+=1
+    if mp[stx][sty]=='o':
+        shcnt+=1
+    queue.append([stx, sty])
+    visit[stx][sty]=1
+    while queue:
+        now=queue.popleft()
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=R or nowy<0 or nowy>=C or visit[nowx][nowy]==1 or mp[nowx][nowy]=='#':
+                continue
+            if mp[nowx][nowy]=='v':
+                wfcnt+=1
+            if mp[nowx][nowy]=='o':
+                shcnt+=1
+            queue.append([nowx, nowy])
+            visit[nowx][nowy]=1
+    if shcnt>wfcnt:
+        sheep[0]+=shcnt
+    else:
+        wolf[0]+=wfcnt
+R,C=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(R):
+    mp.append(list(sys.stdin.readline().rstrip()))
+visit=[[0]*C for _ in range(R)]
+sheep=[0]
+wolf=[0]
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]!='#' and visit[i][j]==0:
+            bfs(R, C, mp, sheep, wolf, i, j, visit)
+print(sheep[0], wolf[0])
