@@ -1,0 +1,76 @@
+import sys
+from collections import deque
+def bfsgaro(N, board, stx, sty):
+    queue=deque()
+    dx=[0,0]
+    dy=[-1,1]
+    queue.append([stx,sty])
+    cnt=1
+    first=board[stx][sty]
+    visit=[0]*N
+    visit[sty]=1
+    while queue:
+        now=queue.popleft()
+        for i in range(2):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=N or nowy<0 or nowy>=N or visit[nowy]==1 or board[nowx][nowy]!=first:
+                continue
+            queue.append([nowx, nowy])
+            cnt+=1
+            visit[nowy]=1
+    return cnt
+def bfssero(N, board, stx, sty):
+    queue=deque()
+    dx=[-1,1]
+    dy=[0,0]
+    queue.append([stx, sty])
+    cnt=1
+    first=board[stx][sty]
+    visit=[0]*N
+    visit[stx]=1
+    while queue:
+        now=queue.popleft()
+        for i in range(2):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=N or nowy<0 or nowy>=N or visit[nowx]==1 or board[nowx][nowy]!=first:
+                continue
+            queue.append([nowx, nowy])
+            cnt+=1
+            visit[nowx]=1
+    return cnt
+N=int(sys.stdin.readline())
+board=[]
+for _ in range(N):
+    board.append(list(sys.stdin.readline().rstrip()))
+res=0
+for i in range(N):
+    for j in range(N):
+        res=max(res, bfsgaro(N, board, i, j))
+        res=max(res, bfssero(N, board, i, j))
+for i in range(N-1):
+    for j in range(N-1):
+        if board[i][j]!=board[i][j+1]:
+            board[i][j],board[i][j+1]=board[i][j+1],board[i][j]
+            res=max(res, bfsgaro(N, board, i, j))
+            res=max(res, bfsgaro(N, board, i, j+1))
+            res=max(res, bfssero(N, board, i, j))
+            res=max(res, bfssero(N, board, i, j+1))
+            board[i][j],board[i][j+1]=board[i][j+1],board[i][j]
+        if board[i][j]!=board[i+1][j]:
+            board[i][j],board[i+1][j]=board[i+1][j],board[i][j]
+            res=max(res, bfsgaro(N, board, i, j))
+            res=max(res, bfsgaro(N, board, i+1, j))
+            res=max(res, bfssero(N, board, i, j))
+            res=max(res, bfssero(N, board, i+1, j))
+            board[i][j],board[i+1][j]=board[i+1][j],board[i][j]
+for i in range(N-1):
+    if board[N-1][i]!=board[N-1][i+1]:
+        board[N-1][i],board[N-1][i+1]=board[N-1][i+1],board[N-1][i]
+        res=max(res, bfsgaro(N, board, N-1, i))
+        res=max(res, bfsgaro(N, board, N-1, i+1))
+        res=max(res, bfssero(N, board, N-1, i))
+        res=max(res, bfssero(N, board, N-1, i+1))
+        board[N-1][i],board[N-1][i+1]=board[N-1][i+1],board[N-1][i]
+print(res)
