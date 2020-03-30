@@ -1,0 +1,54 @@
+import sys
+from collections import deque
+N=int(sys.stdin.readline())
+K=int(sys.stdin.readline())
+mp=[[0]*N for _ in range(N)]
+for _ in range(K):
+    i,j=map(int, sys.stdin.readline().split())
+    mp[i-1][j-1]=1
+L=int(sys.stdin.readline())
+drqueue=deque()
+for _ in range(L):
+    X,C=sys.stdin.readline().split()
+    X=int(X)
+    drqueue.append([X,C])
+mp[0][0]=2
+cnt=0
+now=1
+nowx=nowy=0
+dx=[0,-1,0,1]
+dy=[-1,0,1,0]
+dr=2
+dircomment=drqueue.popleft()
+dirflag=1
+snake=deque()
+snake.append([0, 0])
+while True:
+    cnt+=1
+    nowx+=dx[dr]
+    nowy+=dy[dr]
+    if nowx<0 or nowx>=N or nowy<0 or nowy>=N or mp[nowx][nowy]==2:
+        break
+    if mp[nowx][nowy]==1:
+        mp[nowx][nowy]=2
+        snake.append([nowx, nowy])
+    else:
+        mp[nowx][nowy]=2
+        ed=snake.popleft()
+        snake.append([nowx, nowy])
+        mp[ed[0]][ed[1]]=0
+    if dirflag==1:
+        if cnt==dircomment[0]:
+            if dircomment[1]=='D':
+                dr=dr+1
+                if dr==4:
+                    dr=0
+            else:
+                dr=dr-1
+                if dr==-1:
+                    dr=3
+            if drqueue:
+                dircomment=drqueue.popleft()
+            else:
+                dirflag=0
+print(cnt)
