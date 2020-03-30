@@ -1,0 +1,71 @@
+import sys
+from collections import deque
+def bfs(ox, oy, tx, ty, mp, R, C):
+    queue=deque()
+    queue.append([ox,oy])
+    visit=[[0]*C for _ in range(R)]
+    visit[ox][oy]=1
+    dx=[0,-1,0,1]
+    dy=[-1,0,1,0]
+    while queue:
+        now=queue.popleft()
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx==tx and nowy==ty:
+                return 1
+            if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='X' or visit[nowx][nowy]==1:
+                continue
+            queue.append([nowx, nowy])
+            visit[nowx][nowy]=1
+    return 0
+R,C=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(R):
+    mp.append(list(sys.stdin.readline().rstrip()))
+ox=oy=tx=ty=-1
+dx=[0,-1,0,1]
+dy=[-1,0,1,0]
+melt=deque()
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]=='L':
+            if ox==-1:
+                ox=i
+                oy=j
+            else:
+                tx=i
+                ty=j
+            for k in range(4):
+                nowx=i+dx[k]
+                nowy=j+dy[k]
+                if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='L' or mp[nowx][nowy]=='.':
+                    continue
+                melt.append([nowx,nowy])
+        elif mp[i][j]=='.':
+            for k in range(4):
+                nowx=i+dx[k]
+                nowy=j+dy[k]
+                if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='L' or mp[nowx][nowy]=='.':
+                    continue
+                melt.append([nowx, nowy])
+                
+
+day=0
+while True:
+    r=bfs(ox,oy,tx,ty,mp,R,C)
+    if r==0:
+        l=len(melt)
+        for i in range(l):
+            now=melt.popleft()
+            for j in range(4):
+                nowx=now[0]+dx[j]
+                nowy=now[1]+dy[j]
+                if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='L' or mp[nowx][nowy]=='.':
+                    continue
+                melt.append([nowx, nowy])
+            mp[now[0]][now[1]]='.'
+        day+=1
+    else:
+        break
+print(day)
