@@ -1,0 +1,28 @@
+import sys
+sys.setrecursionlimit(10**8)
+def permut(N, full, half, dp, cnt):
+    if dp[full][half]!=0:
+        return dp[full][half]
+    elif cnt>=2*N:
+        return 1
+    else:
+        f=h=0
+        if full!=0:
+            f=permut(N, full-1, half+1, dp, cnt+1)
+        if half!=0:
+            h=permut(N, full, half-1, dp, cnt+1)
+        dp[full][half]=f+h
+        return dp[full][half]
+
+            
+dp=[[0]*31 for _ in range(31)]
+dp[1][0]=1
+for i in range(2, 31):
+    dp[i][0]=permut(i, i, 0, dp, 0)
+
+while True:
+    
+    num=int(sys.stdin.readline())
+    if num==0:
+        break
+    print(dp[num][0])
