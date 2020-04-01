@@ -1,0 +1,43 @@
+import sys
+from collections import deque
+mp=list(sys.stdin.readline())
+firstin=0
+first=""
+while True:
+    if mp[firstin]==' ':
+        break
+    first=first+mp[firstin]
+    firstin+=1
+res=[]
+
+l=len(mp)
+tmp=""
+alpha=deque()
+resalpha=[]
+for i in range(l-3, firstin, -1):
+    if mp[i]=='*' or mp[i]=='&':
+        tmp=tmp+mp[i]
+    elif mp[i]=='[':
+        tmp=tmp+']'
+    elif mp[i]==']':
+        tmp=tmp+'['
+    elif mp[i]==' ':
+        continue
+    elif mp[i]==',':
+        res.append(tmp)
+        resalpha.append(alpha)
+        tmp=""
+        alpha=deque()
+    else:
+        alpha.appendleft(mp[i])
+    if i==firstin+1:
+        res.append(tmp)
+        resalpha.append(alpha)
+l=len(res)
+for i in range(l-1, -1, -1):
+    print(first, end='')
+    print(res[i], end='')
+    print(' ', end='')
+    for j in range(len(resalpha[i])):
+        print(resalpha[i][j], end='')
+    print(';')
