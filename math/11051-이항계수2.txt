@@ -1,0 +1,11 @@
+import sys
+
+N,K=map(int, sys.stdin.readline().split())
+
+num=1
+for i in range(N-K+1, N+1):
+    num=num*i
+k=1
+for i in range(1, K+1):
+    k=k*i
+print((num//k)%10007)
