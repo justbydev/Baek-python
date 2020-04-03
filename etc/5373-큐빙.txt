@@ -1,0 +1,178 @@
+import sys
+
+def turnnow(now, dr, flag):
+    if flag==0:
+        if dr=='+':
+            tmp=now[0][0]
+            now[0][0]=now[2][0]
+            now[2][0]=now[2][2]
+            now[2][2]=now[0][2]
+            now[0][2]=tmp
+            tmp=now[0][1]
+            now[0][1]=now[1][0]
+            now[1][0]=now[2][1]
+            now[2][1]=now[1][2]
+            now[1][2]=tmp
+        else:
+            tmp=now[0][0]
+            now[0][0]=now[0][2]
+            now[0][2]=now[2][2]
+            now[2][2]=now[2][0]
+            now[2][0]=tmp
+            tmp=now[0][1]
+            now[0][1]=now[1][2]
+            now[1][2]=now[2][1]
+            now[2][1]=now[1][0]
+            now[1][0]=tmp
+    else:
+        if dr=='+':
+            tmp=now[0][0]
+            now[0][0]=now[0][2]
+            now[0][2]=now[2][2]
+            now[2][2]=now[2][0]
+            now[2][0]=tmp
+            tmp=now[0][1]
+            now[0][1]=now[1][2]
+            now[1][2]=now[2][1]
+            now[2][1]=now[1][0]
+            now[1][0]=tmp
+        else:
+            tmp=now[0][0]
+            now[0][0]=now[2][0]
+            now[2][0]=now[2][2]
+            now[2][2]=now[0][2]
+            now[0][2]=tmp
+            tmp=now[0][1]
+            now[0][1]=now[1][0]
+            now[1][0]=now[2][1]
+            now[2][1]=now[1][2]
+            now[1][2]=tmp
+def turnfront(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[2][i]
+            up[2][i]=left[2-i][2]
+            left[2-i][2]=down[0][2-i]
+            down[0][2-i]=right[i][0]
+            right[i][0]=tmp
+            
+    else:
+        for i in range(3):
+            tmp=up[2][i]
+            up[2][i]=right[i][0]
+            right[i][0]=down[0][2-i]
+            down[0][2-i]=left[2-i][2]
+            left[2-i][2]=tmp
+def turnback(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[0][2-i]
+            up[0][2-i]=left[2-i][2]
+            left[2-i][2]=down[2][i]
+            down[2][i]=right[i][0]
+            right[i][0]=tmp
+    else:
+        for i in range(3):
+            tmp=up[0][2-i]
+            up[0][2-i]=right[i][0]
+            right[i][0]=down[2][i]
+            down[2][i]=left[2-i][2]
+            left[2-i][2]=tmp
+def turnleft(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[i][0]
+            up[i][0]=left[2-i][0]
+            left[2-i][0]=down[i][0]
+            down[i][0]=right[i][0]
+            right[i][0]=tmp
+    else:
+        for i in range(3):
+            tmp=up[i][0]
+            up[i][0]=right[i][0]
+            right[i][0]=down[i][0]
+            down[i][0]=left[2-i][0]
+            left[2-i][0]=tmp
+def turnright(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[2-i][2]
+            up[2-i][2]=left[2-i][2]
+            left[2-i][2]=down[2-i][2]
+            down[2-i][2]=right[i][2]
+            right[i][2]=tmp
+    else:
+        for i in range(3):
+            tmp=up[2-i][2]
+            up[2-i][2]=right[i][2]
+            right[i][2]=down[2-i][2]
+            down[2-i][2]=left[2-i][2]
+            left[2-i][2]=tmp
+            
+def turnup(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[0][i]
+            up[0][i]=left[0][2-i]
+            left[0][2-i]=down[0][2-i]
+            down[0][2-i]=right[0][2-i]
+            right[0][2-i]=tmp
+    else:
+        for i in range(3):
+            tmp=up[0][i]
+            up[0][i]=right[0][2-i]
+            right[0][2-i]=down[0][2-i]
+            down[0][2-i]=left[0][2-i]
+            left[0][2-i]=tmp
+def turndown(left, right, up, down, dr):
+    if dr=='+':
+        for i in range(3):
+            tmp=up[2][i]
+            up[2][i]=left[2][i]
+            left[2][i]=down[2][2-i]
+            down[2][2-i]=right[2][i]
+            right[2][i]=tmp
+    else:
+        for i in range(3):
+            tmp=up[2][i]
+            up[2][i]=right[2][i]
+            right[2][i]=down[2][2-i]
+            down[2][2-i]=left[2][i]
+            left[2][i]=tmp
+            
+        
+testcase=int(sys.stdin.readline())
+
+for _ in range(testcase):
+    L=[['g']*3 for _ in range(3)]
+    B=[['o']*3 for _ in range(3)]
+    F=[['r']*3 for _ in range(3)]
+    R=[['b']*3 for _ in range(3)]
+    U=[['w']*3 for _ in range(3)]
+    D=[['y']*3 for _ in range(3)]
+    N=int(sys.stdin.readline())
+    move=list(sys.stdin.readline().strip())
+    l=len(move)
+    for i in range(0, l, 3):
+        if move[i]=='F':
+            turnfront(L, R, U, D, move[i+1])
+            turnnow(F, move[i+1], 0)
+        elif move[i]=='D':
+            turndown(L, R, F, B, move[i+1])
+            turnnow(D, move[i+1], 0)
+        elif move[i]=='B':
+            turnback(R, L, U, D, move[i+1])
+            turnnow(B, move[i+1], 1)
+        elif move[i]=='U':
+            turnup(L, R, B, F, move[i+1])
+            turnnow(U, move[i+1], 0)
+        elif move[i]=='L':
+            turnleft(B, F, U, D, move[i+1])
+            turnnow(L, move[i+1], 0)
+        elif move[i]=='R':
+            turnright(F, B, U, D, move[i+1])
+            turnnow(R, move[i+1], 0)
+    for i in range(3):
+        for j in range(3):
+            print(U[i][j], end='')
+        print()
