@@ -1,0 +1,19 @@
+import sys
+
+N,M=map(int, sys.stdin.readline().split())
+num=list(map(int, sys.stdin.readline().split()))
+sm=[0]*N
+now=num[0]
+sm[0]=now
+for i in range(1, N):
+    now+=num[i]
+    sm[i]=now
+for _ in range(M):
+    i,j=map(int, sys.stdin.readline().split())
+    if i==j:
+        print(num[i-1])
+    else:
+        if i==1:
+            print(sm[j-1])
+        else:
+            print(sm[j-1]-sm[i-2])
