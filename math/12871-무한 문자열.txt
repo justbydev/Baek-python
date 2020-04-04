@@ -1,0 +1,27 @@
+import sys
+
+def uclid(one, two):
+    while True:
+        if one==0 and two!=0:
+            return two
+        if one!=0 and two==0:
+            return one
+        if one>=two:
+            one=one%two
+        else:
+            two=two%one
+s=sys.stdin.readline().rstrip()
+t=sys.stdin.readline().rstrip()
+gcd=uclid(len(s), len(t))
+tmp1=""
+tmp2=""
+for i in range(len(s)//gcd):
+    tmp1=tmp1+t
+for i in range(len(t)//gcd):
+    tmp2=tmp2+s
+flag=1
+for i in range(len(tmp1)):
+    if tmp1[i]!=tmp2[i]:
+        flag=0
+        break
+print(flag)
