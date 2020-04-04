@@ -1,0 +1,18 @@
+import sys
+
+N=int(sys.stdin.readline())
+num=list(map(int, sys.stdin.readline().split()))
+T,S=map(int, sys.stdin.readline().split())
+
+res=0
+for i in range(N):
+    if num[i]<=T:
+        res+=1
+    else:
+        res+=1
+        num[i]=num[i]-T
+        if num[i]%S==0:
+            res+=num[i]//S
+        else:
+            res+=(num[i]//S+1)
+print(res)
