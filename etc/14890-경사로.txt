@@ -1,0 +1,117 @@
+import sys
+
+N,L=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+res=0
+visit=[[0]*N for _ in range(N)]
+visit2=[[0]*N for _ in range(N)]
+for i in range(N):
+    index=0
+    cont=1
+    flag=1
+    st=ed=0
+    while True:
+        if index>=N-1:
+            break
+        if mp[i][index]==mp[i][index+1]:
+            cont+=1
+            index+=1
+            ed+=1
+        elif abs(mp[i][index]-mp[i][index+1])>=2:
+            flag=0
+            break
+        elif mp[i][index+1]-mp[i][index]==1:
+            cont=0
+            for j in range(ed, st-1, -1):
+                if visit[i][j]==1:
+                    st=j+1
+                    break
+                else:
+                    cont+=1
+            if cont>=L:
+                cont=1
+                index+=1
+                for j in range(ed, ed-L, -1):
+                    visit[i][j]=1
+                st=ed=index
+            else:
+                flag=0
+                break
+        elif mp[i][index]-mp[i][index+1]==1:
+            cont=1
+            st=ed=index+1
+            while True:
+                if ed>=N-1:
+                    break
+                if mp[i][ed]==mp[i][ed+1]:
+                    ed+=1
+                    cont+=1
+                else:
+                    break
+            if cont>=L:
+                cont=1
+                index+=1
+                for j in range(st, st+L):
+                    visit[i][j]=1
+                st=ed=index
+            else:
+                flag=0
+                break
+    if flag==1:
+        res+=1
+    index=0
+    cont=1
+    flag=1
+    st=ed=0
+    while True:
+        if index>=N-1:
+            break
+        if mp[index][i]==mp[index+1][i]:
+            cont+=1
+            index+=1
+            ed+=1
+        elif abs(mp[index][i]-mp[index+1][i])>=2:
+            flag=0
+            break
+        elif mp[index+1][i]-mp[index][i]==1:
+            cont=0
+            for j in range(ed, st-1, -1):
+                if visit2[j][i]==1:
+                    st=j+1
+                    break
+                else:
+                    cont+=1
+            if cont>=L:
+                cont=1
+                index+=1
+                for j in range(ed, ed-L, -1):
+                    visit2[j][i]=1
+                st=ed=index
+            else:
+                flag=0
+                break
+        elif mp[index][i]-mp[index+1][i]==1:
+            cont=1
+            st=ed=index+1
+            while True:
+                if ed>=N-1:
+                    break
+                if mp[ed][i]==mp[ed+1][i]:
+                    ed+=1
+                    cont+=1
+                else:
+                    break
+            if cont>=L:
+                cont=1
+                index+=1
+                for j in range(st, st+L):
+                    visit2[j][i]=1
+                st=ed=index
+            else:
+                flag=0
+                break
+    if flag==1:
+        res+=1
+print(res)
