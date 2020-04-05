@@ -1,0 +1,54 @@
+import sys
+def change(front, back, left, right, up, down, dr):
+    if dr==1:
+        tmp=up[0]
+        up[0]=left[0]
+        left[0]=down[0]
+        down[0]=right[0]
+        right[0]=tmp
+    elif dr==2:
+        tmp=up[0]
+        up[0]=right[0]
+        right[0]=down[0]
+        down[0]=left[0]
+        left[0]=tmp
+    elif dr==3:
+        tmp=up[0]
+        up[0]=front[0]
+        front[0]=down[0]
+        down[0]=back[0]
+        back[0]=tmp
+    elif dr==4:
+        tmp=up[0]
+        up[0]=back[0]
+        back[0]=down[0]
+        down[0]=front[0]
+        front[0]=tmp
+N,M,y,x,K=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+command=list(map(int, sys.stdin.readline().split()))
+play={'U':0, 'D':0, 'F':0, 'B':0, 'L':0, 'R':0}
+down=['D']
+front=['F']
+right=['R']
+back=['B']
+left=['L']
+up=['U']
+dx=[1, -1, 0, 0]
+dy=[0, 0, -1, 1]
+for i in range(K):
+    nx=x+dx[command[i]-1]
+    ny=y+dy[command[i]-1]
+    if nx<0 or nx>=M or ny<0 or ny>=N:
+        continue
+    change(front, back, left, right, up, down, command[i])
+    if mp[ny][nx]==0:
+        mp[ny][nx]=play[down[0]]
+    else:
+        play[down[0]]=mp[ny][nx]
+        mp[ny][nx]=0
+    print(play[up[0]])
+    x=nx
+    y=ny
