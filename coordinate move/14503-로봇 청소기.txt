@@ -1,0 +1,50 @@
+import sys
+
+N,M=map(int, sys.stdin.readline().split())
+r,c,dr=map(int, sys.stdin.readline().split())
+room=[]
+for _ in range(N):
+    room.append(list(map(int, sys.stdin.readline().split())))
+res=0
+visit=[[0]*M for _ in range(N)]
+dx=[-1, 0, 1, 0]
+dy=[0, 1, 0, -1]
+while True:
+    if room[r][c]==0 and visit[r][c]==0:
+        visit[r][c]=1
+        res+=1
+    rotateflag=0
+    nx=ny=0
+    for _ in range(4):
+        dr=dr-1
+        if dr==-1:
+            dr=3
+        nx=r+dx[dr]
+        ny=c+dy[dr]
+        if nx<0 or nx>=N or ny<0 or ny>=M or room[nx][ny]==1 or visit[nx][ny]==1:
+            continue
+        res+=1
+        visit[nx][ny]=1
+        rotateflag=1
+        break
+    backflag=0
+    if rotateflag==1:
+        r=nx
+        c=ny
+    else:
+        back=0
+        if dr==0 or dr==2:
+            back=2-dr
+        elif dr==1 or dr==3:
+            back=4-dr
+        nx=r+dx[back]
+        ny=c+dy[back]
+        if nx<0 or nx>=N or ny<0 or ny>=M or room[nx][ny]==1:
+            backflag=1
+        if backflag==1:
+            break
+        else:
+            r=nx
+            c=ny
+print(res)
+    
