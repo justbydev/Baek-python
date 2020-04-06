@@ -1,0 +1,135 @@
+import sys
+
+def right_rotate(wheel):
+    tmp=wheel[7]
+    for i in range(6, -1, -1):
+        wheel[i+1]=wheel[i]
+    wheel[0]=tmp
+def left_rotate(wheel):
+    tmp=wheel[0]
+    for i in range(1, 8):
+        wheel[i-1]=wheel[i]
+    wheel[7]=tmp
+first=list(map(int, sys.stdin.readline().rstrip()))
+second=list(map(int, sys.stdin.readline().rstrip()))
+third=list(map(int, sys.stdin.readline().rstrip()))
+fourth=list(map(int, sys.stdin.readline().rstrip()))
+K=int(sys.stdin.readline())
+r=[]
+for _ in range(K):
+    r.clear()
+    num,dr=map(int, sys.stdin.readline().split())
+    if num==1:
+        flag=0
+        if first[2]!=second[6]:
+            if dr==1:
+                r.append([2,-1])
+                flag=-1
+            else:
+                r.append([2,1])
+                flag=1
+        if flag!=0 and second[2]!=third[6]:
+            if flag==1:
+                r.append([3,-1])
+                flag=-1
+            else:
+                r.append([3,1])
+                flag=1
+        else:
+            flag=0
+        if flag!=0 and third[2]!=fourth[6]:
+            if flag==1:
+                r.append([4,-1])
+            else:
+                r.append([4,1])
+    elif num==2:
+        flag=0
+        if first[2]!=second[6]:
+            if dr==1:
+                r.append([1,-1])
+            else:
+                r.append([1,1])
+        if second[2]!=third[6]:
+            if dr==1:
+                r.append([3,-1])
+                flag=-1
+            else:
+                r.append([3,1])
+                flag=1
+        if flag!=0 and third[2]!=fourth[6]:
+            if flag==1:
+                r.append([4,-1])
+            else:
+                r.append([4,1])
+    elif num==3:
+        flag=0
+        if third[2]!=fourth[6]:
+            if dr==1:
+                r.append([4,-1])
+            else:
+                r.append([4,1])
+        if second[2]!=third[6]:
+            if dr==1:
+                r.append([2,-1])
+                flag=-1
+            else:
+                r.append([2,1])
+                flag=1
+        if flag!=0 and first[2]!=second[6]:
+            if flag==1:
+                r.append([1,-1])
+            else:
+                r.append([1,1])
+    else:
+        flag=0
+        if third[2]!=fourth[6]:
+            if dr==1:
+                r.append([3,-1])
+                flag=-1
+            else:
+                r.append([3,1])
+                flag=1
+        if flag!=0 and second[2]!=third[6]:
+            if flag==1:
+                r.append([2,-1])
+                flag=-1
+            else:
+                r.append([2,1])
+                flag=1
+        else:
+            flag=0
+        if flag!=0 and first[2]!=second[6]:
+            if flag==1:
+                r.append([1,-1])
+            else:
+                r.append([1,1])
+    r.append([num,dr])
+    l=len(r)
+    for i in range(l):
+        now=r[i]
+        if now[0]==1 and now[1]==1:
+            right_rotate(first)
+        elif now[0]==1 and now[1]==-1:
+            left_rotate(first)
+        elif now[0]==2 and now[1]==1:
+            right_rotate(second)
+        elif now[0]==2 and now[1]==-1:
+            left_rotate(second)
+        elif now[0]==3 and now[1]==1:
+            right_rotate(third)
+        elif now[0]==3 and now[1]==-1:
+            left_rotate(third)
+        elif now[0]==4 and now[1]==1:
+            right_rotate(fourth)
+        elif now[0]==4 and now[1]==-1:
+            left_rotate(fourth)
+res=0
+if first[0]==1:
+    res+=1
+if second[0]==1:
+    res+=2
+if third[0]==1:
+    res+=4
+if fourth[0]==1:
+    res+=8
+print(res)
