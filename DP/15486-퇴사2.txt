@@ -1,0 +1,40 @@
+import sys
+
+N=int(sys.stdin.readline())
+say=[]
+for _ in range(N):
+    say.append(list(map(int, sys.stdin.readline().split())))
+dp=[0]*N
+if N==1:
+    if say[0][0]==1:
+        print(say[0][1])
+    else:
+        print(0)
+elif N==2:
+    if say[N-1][0]==1:
+        dp[N-1]=say[N-1][1]
+    if say[N-2][0]==1:
+        dp[N-2]=dp[N-1]+say[N-2][1]
+    elif say[N-2][0]==2:
+        dp[N-2]=max(say[N-2][1], dp[N-1])
+    else:
+        dp[N-2]=dp[N-1]
+    print(dp[0])
+else:
+    if say[N-1][0]==1:
+        dp[N-1]=say[N-1][1]
+    if say[N-2][0]==1:
+        dp[N-2]=dp[N-1]+say[N-2][1]
+    elif say[N-2][0]==2:
+        dp[N-2]=max(say[N-2][1], dp[N-1])
+    else:
+        dp[N-2]=dp[N-1]
+    for i in range(N-3, -1, -1):
+        one=two=0
+        one=dp[i+1]
+        if i+say[i][0]==N:
+            two=say[i][1]
+        elif i+say[i][0]<N:
+            two=say[i][1]+dp[i+say[i][0]]
+        dp[i]=max(one, two)
+    print(dp[0])
