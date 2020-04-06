@@ -1,0 +1,174 @@
+import sys
+from collections import deque
+def move(now, state, dr, mp, ox, oy, xy, flag):
+    if xy==0: #x변화
+        while True:
+            now[0]=now[0]+dr
+            if mp[now[0]][state[0]]=='O':
+                break
+            if mp[now[0]][state[0]]=='#':
+                now[0]=now[0]-dr
+                break
+            if flag==1:
+                if now[0]==ox[0] and state[0]==oy[0]:
+                    now[0]=now[0]-dr
+                    break
+    else: #y변화
+        while True:
+            now[0]=now[0]+dr
+            if mp[state[0]][now[0]]=='O':
+                break
+            if mp[state[0]][now[0]]=='#':
+                now[0]=now[0]-dr
+                break
+            if flag==1:
+                if state[0]==ox[0] and now[0]==oy[0]:
+                    now[0]=now[0]-dr
+                    break
+                
+def bfs(N, M, mp, rx, ry, bx, by, sx, sy):
+    queue=deque()
+    count=deque()
+    queue.append([rx,ry,bx,by])
+    count.append(0)
+    visit=dict()
+    visit[(rx,ry,bx,by)]=1
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        if now[1]<=now[3]:
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowry, nowrx, -1, mp, nowbx, nowby, 1, 0)
+            move(nowby, nowbx, -1, mp, nowrx, nowry, 1, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowby, nowbx, 1, mp, nowrx, nowry, 1, 0)
+            move(nowry, nowrx, 1, mp, nowbx, nowby, 1, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+        else:
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowby,nowbx,-1, mp, nowrx, nowry, 1, 0)
+            move(nowry,nowrx,-1,mp, nowbx, nowby, 1, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowry, nowrx, 1, mp, nowbx, nowby, 1, 0)
+            move(nowby, nowbx, 1, mp, nowrx, nowry, 1, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+        if now[0]<=now[2]:
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowrx, nowry, -1, mp,nowbx, nowby, 0, 0)
+            move(nowbx, nowby, -1, mp,nowrx, nowry, 0, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowbx, nowby, 1, mp, nowrx, nowry, 0, 0)
+            move(nowrx, nowry, 1, mp, nowbx, nowby, 0, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+        else:
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowbx, nowby, -1, mp, nowrx, nowry, 0, 0)
+            move(nowrx, nowry, -1, mp, nowbx, nowby, 0, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+            nowrx=[now[0]]
+            nowry=[now[1]]
+            nowbx=[now[2]]
+            nowby=[now[3]]
+            move(nowrx, nowry, 1, mp, nowbx, nowby, 0, 0)
+            move(nowbx, nowby, 1, mp, nowrx, nowry, 0, 1)
+            if not visit.get((nowrx[0], nowry[0], nowbx[0], nowby[0])):
+                if mp[nowrx[0]][nowry[0]]=='O' and mp[nowbx[0]][nowby[0]]!='O':
+                    return cnt+1
+                elif mp[nowbx[0]][nowby[0]]!='O':
+                    queue.append([nowrx[0],nowry[0],nowbx[0],nowby[0]])
+                    count.append(cnt+1)
+                    visit[(nowrx[0],nowry[0],nowbx[0],nowby[0])]=1
+    return -1
+        
+                
+            
+                
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(sys.stdin.readline().rstrip()))
+rx=ry=bx=by=sx=sy=-1
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]=='B':
+            bx=i
+            by=j
+            mp[i][j]='.'
+        if mp[i][j]=='R':
+            rx=i
+            ry=j
+            mp[i][j]='.'
+        if mp[i][j]=='O':
+            sx=i
+            sy=j
+r=bfs(N, M, mp, rx, ry, bx, by, sx, sy)
+if r==-1:
+    print(-1)
+else:
+    print(r)
