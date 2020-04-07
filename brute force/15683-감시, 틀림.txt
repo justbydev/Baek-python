@@ -1,0 +1,278 @@
+import sys
+
+def one(N, M, mp, dr, x, y):
+    if dr==1:
+        for i in range(x-1, -1, -1):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+    elif dr==2:
+        for i in range(y+1, M):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+    elif dr==3:
+        for i in range(x+1, N):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+    else:
+        for i in range(y-1, -1, -1):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+def two(N, M, mp, dr, x, y):
+    if dr==1:
+        for i in range(y+1, M):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+        for i in range(y-1, -1, -1):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+    else:
+        for i in range(x-1, -1, -1):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+        for i in range(x+1, N):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+def three(N, M, mp, dr, x, y):
+    if dr==1:
+        for i in range(x-1, -1, -1):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+        for i in range(y+1, M):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+    elif dr==2:
+        for i in range(y+1, M):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+        for i in range(x+1, N):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+    elif dr==3:
+        for i in range(x+1, N):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+        for i in range(y-1, -1, -1):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+    else:
+        for i in range(y-1, -1, -1):
+            if mp[x][i]==6:
+                break
+            elif mp[x][i]>=7:
+                mp[x][i]+=1
+                continue
+            elif mp[x][i]>=1 and mp[x][i]<=5:
+                continue
+            mp[x][i]=7
+        for i in range(x-1, -1, -1):
+            if mp[i][y]==6:
+                break
+            elif mp[i][y]>=7:
+                mp[i][y]+=1
+                continue
+            elif mp[i][y]>=1 and mp[i][y]<=5:
+                continue
+            mp[i][y]=7
+def four(N, M, mp, dr, x, y):
+    if dr==1:
+        two(N, M, mp, 1, x, y)
+        one(N, M, mp, 1, x, y)
+    elif dr==2:
+        two(N, M, mp, 2, x, y)
+        one(N, M, mp, 2, x, y)
+    elif dr==3:
+        two(N, M, mp, 1, x, y)
+        one(N, M, mp, 3, x, y)
+    else:
+        two(N, M, mp, 2, x, y)
+        one(N, M, mp, 4, x, y)
+def five(N, M, mp, x, y):
+    two(N, M, mp, 1, x, y)
+    two(N, M, mp, 2, x, y)
+def makeorigin(N, M, mp, dr, x, y):
+    if dr==1:
+        for i in range(x-1, -1, -1):
+            if mp[i][y]==7:
+                mp[i][y]=0
+            elif mp[i][y]>=8:
+                mp[i][y]-=1
+            else:
+                break
+    elif dr==2:
+        for i in range(y+1, M):
+            if mp[x][i]==7:
+                mp[x][i]=0
+            elif mp[x][i]>=8:
+                mp[x][i]-=1
+            else:
+                break
+    elif dr==3:
+        for i in range(x+1, N):
+            if mp[i][y]==7:
+                mp[i][y]=0
+            elif mp[i][y]>=8:
+                mp[i][y]-=1
+            else:
+                break
+    else:
+        for i in range(y-1, -1, -1):
+            if mp[x][i]==7:
+                mp[x][i]=0
+            elif mp[x][i]>=8:
+                mp[x][i]-=1
+            else:
+                break
+def dfs(N, M, mp, cctv, cnt, res, now):
+    if now>=cnt:
+        r=0
+        for i in range(N):
+            for j in range(M):
+                if mp[i][j]==0:
+                    r+=1
+        res[0]=min(res[0], r)
+        for i in range(N):
+            print(*mp[i])
+        print('-------------------------------')
+        return
+    else:
+        nw=cctv[now]
+        if nw[2]==1:
+            for i in range(1, 5):
+                one(N, M, mp, i, nw[0], nw[1])
+                dfs(N, M, mp, cctv, cnt, res, now+1)
+                makeorigin(N, M, mp, i, nw[0], nw[1])
+        elif nw[2]==2:
+            for i in range(1, 3):
+                two(N, M, mp, i, nw[0], nw[1])
+                dfs(N, M, mp, cctv, cnt, res, now+1)
+                if i==1:
+                    makeorigin(N, M, mp, 2, nw[0], nw[1])
+                    makeorigin(N, M, mp, 4, nw[0], nw[1])
+                else:
+                    makeorigin(N, M, mp, 1, nw[0], nw[1])
+                    makeorigin(N, M, mp, 3, nw[0], nw[1])
+        elif nw[2]==3:
+            for i in range(1, 5):
+                three(N, M, mp, i, nw[0], nw[1])
+                dfs(N, M, mp, cctv, cnt, res, now+1)
+                makeorigin(N, M, mp, i, nw[0], nw[1])
+                if i==4:
+                    makeorigin(N, M, mp, 1, nw[0], nw[1])
+                else:
+                    makeorigin(N, M, mp, i+1, nw[0], nw[1])
+        elif nw[2]==4:
+            for i in range(1, 5):
+                four(N, M, mp, i, nw[0], nw[1])
+                dfs(N, M, mp, cctv, cnt, res, now+1)
+                if i==1:
+                    makeorigin(N, M, mp, 4, nw[0], nw[1])
+                else:
+                    makeorigin(N, M, mp, i-1, nw[0], nw[1])
+                makeorigin(N, M, mp, i, nw[0], nw[1])
+                if i==4:
+                    makeorigin(N, M, mp, 1, nw[0], nw[1])
+                else:
+                    makeorigin(N, M, mp, i+1, nw[0], nw[1])
+        elif nw[2]==5:
+            five(N, M, mp, nw[0], nw[1])
+            dfs(N, M, mp, cctv, cnt, res, now+1)
+            for i in range(1, 5):
+                makeorigin(N, M, mp, i, nw[0], nw[1])
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+cctv=[]
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]>=1 and mp[i][j]<=5:
+            cctv.append([i,j,mp[i][j]])
+cnt=len(cctv)
+res=[65]
+dfs(N, M, mp, cctv, cnt, res, 0)
+print(res[0])
+
