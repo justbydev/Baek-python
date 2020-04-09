@@ -1,0 +1,47 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10*8)
+def dfs(hl, chl, road, res, M, cnt, now, pick):
+    if cnt==M:
+        r=0
+        for i in range(hl):
+            sm=-1
+            for j in range(M):
+                if sm==-1:
+                    sm=road[i][pick[j]]
+                else:
+                    sm=min(sm, road[i][pick[j]])
+            r+=sm
+        if res[0]==-1:
+            res[0]=r
+        else:
+            res[0]=min(res[0], r)
+    elif now>=chl:
+        return
+    else:
+        pick.append(now)
+        dfs(hl, chl, road, res, M, cnt+1, now+1, pick)
+        pick.pop()
+        dfs(hl, chl, road, res, M, cnt, now+1, pick)
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+chicken=[]
+house=[]
+for i in range(N):
+    for j in range(N):
+        if mp[i][j]==2:
+            chicken.append([i, j])
+        if mp[i][j]==1:
+            house.append([i, j])
+chl=len(chicken)
+hl=len(house)
+road=[[0]*chl for _ in range(hl)]
+for i in range(hl):
+    for j in range(chl):
+        road[i][j]=abs(house[i][0]-chicken[j][0])+abs(house[i][1]-chicken[j][1])
+res=[-1]
+pick=deque()
+dfs(hl, chl, road, res, M, 0, 0, pick)
+print(res[0])
