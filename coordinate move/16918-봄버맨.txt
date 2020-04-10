@@ -1,0 +1,42 @@
+import sys
+from collections import deque
+
+def bfs(R, C, N, mp):
+    time=2
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    while time<=N:
+        if time%2==0:
+            for i in range(R):
+                for j in range(C):
+                    if mp[i][j]=='.':
+                        mp[i][j]=time
+        elif time%2==1:
+            for i in range(R):
+                for j in range(C):
+                    if mp[i][j]==time-3:
+                        mp[i][j]='.'
+                        for k in range(4):
+                            nowx=i+dx[k]
+                            nowy=j+dy[k]
+                            if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='.' or mp[nowx][nowy]==time-3:
+                                continue
+                            mp[nowx][nowy]='.'
+        time+=1
+R,C,N=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(R):
+    mp.append(list(sys.stdin.readline().rstrip()))
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]=='O':
+            mp[i][j]=0
+bfs(R, C, N, mp)
+
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]!='.':
+            print('O', end='')
+        else:
+            print(mp[i][j], end='')
+    print()
