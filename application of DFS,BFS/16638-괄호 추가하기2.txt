@@ -1,0 +1,109 @@
+import sys
+from collections import deque
+import copy
+sys.setrecursionlimit(10**8)
+def dfs(N, mp, mx, add, real, now):
+    if now>=N-2:
+        index=0
+        queue=deque()
+        if len(add)!=0:
+            nw=add.popleft()
+            while True:
+                if index==nw[0]:
+                    if mp[nw[0]+1]=='+':
+                        queue.append(int(mp[nw[0]])+int(mp[nw[0]+2]))
+                    elif mp[nw[0]+1]=='-':
+                        queue.append(int(mp[nw[0]])-int(mp[nw[0]+2]))
+                    elif mp[nw[0]+1]=='*':
+                        queue.append(int(mp[nw[0]])*int(mp[nw[0]+2]))
+                    index+=3
+                    if index>=N:
+                        break
+                    else:
+                        queue.append(mp[index])
+                        index+=1
+                    if add:
+                        nw=add.popleft()
+                else:
+                    queue.append(int(mp[index]))
+                    if index+1>=N:
+                        break
+                    else:
+                        queue.append(mp[index+1])
+                        index+=2
+                if index>=N:
+                    break
+            queue2=deque()
+            now=0
+            l=len(queue)
+            while True:
+                if now>=l:
+                    break
+                if now==0:
+                    queue2.append(queue[0])
+                    now+=1
+                else:
+                    if queue[now]=='*':
+                        tmp=queue2.pop()
+                        queue2.append(tmp*queue[now+1])
+                        now+=2
+                    else:
+                        queue2.append(queue[now])
+                        queue2.append(queue[now+1])
+                        now+=2
+            res=queue2.popleft()
+            while queue2:
+                n=queue2.popleft()
+                if n=='+':
+                    res=res+queue2.popleft()
+                elif n=='-':
+                    res=res-queue2.popleft()
+            mx[0]=max(mx[0], res)
+        return
+    add.append([now, now+2])
+    real.append([now, now+2])
+    dfs(N, mp, mx, add, real, now+4)
+    real.pop()
+    add=copy.deepcopy(real)
+    dfs(N, mp, mx, add, real, now+2)
+N=int(sys.stdin.readline())
+mp=list(sys.stdin.readline().rstrip())
+queue=deque()
+now=0
+if N==1:
+    print(int(mp[0]))
+elif N==3:
+    if mp[1]=='+':
+        print(int(mp[0])+int(mp[2]))
+    elif mp[1]=='-':
+        print(int(mp[0])-int(mp[2]))
+    elif mp[1]=='*':
+        print(int(mp[0])*int(mp[2]))
+else:
+    while True:
+        if now>=N:
+            break
+        if now==0:
+            queue.append(int(mp[now]))
+            now+=1
+        else:
+            if mp[now]=='*':
+                tmp=queue.pop()
+                queue.append(tmp*int(mp[now+1]))
+                now+=2
+            else:
+                queue.append(mp[now])
+                queue.append(int(mp[now+1]))
+                now+=2
+    mx=[int(queue.popleft())]
+    while queue:
+        now=queue.popleft()
+        if now=='+':
+            mx[0]=mx[0]+int(queue.popleft())
+        elif now=='-':
+            mx[0]=mx[0]-int(queue.popleft())
+    add=deque()
+    real=deque()
+    origin=mx[0]
+    dfs(N, mp, mx, add, real, 0)
+    print(mx[0])
