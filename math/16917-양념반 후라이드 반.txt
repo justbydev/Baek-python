@@ -1,0 +1,22 @@
+import sys
+
+A,B,C,X,Y=map(int, sys.stdin.readline().split())
+
+half=1
+res=A*X+B*Y
+while True:
+    if half//2>X and half//2>Y:
+        break
+    if half//2>X:
+        tmpX=0
+    else:
+        tmpX=X-half//2
+    if half//2>Y:
+        tmpY=0
+    else:
+        tmpY=Y-half//2
+    tmp=half*C
+    tmp+=tmpX*A+tmpY*B
+    res=min(res, tmp)
+    half+=1
+print(res)
