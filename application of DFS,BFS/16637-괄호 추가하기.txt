@@ -1,0 +1,61 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, now, mx, sm):
+    if now>=N:
+        mx[0]=max(mx[0], sm)
+        return
+    elif now==N-2:
+        if mp[now]=='-':
+            mx[0]=max(mx[0], sm-int(mp[now+1]))
+        elif mp[now]=='+':
+            mx[0]=max(mx[0], sm+int(mp[now+1]))
+        elif mp[now]=='*':
+            mx[0]=max(mx[0], sm*int(mp[now+1]))
+        return
+    if now==0:
+        dfs(N, now+1, mx, int(mp[now]))
+        r=int(mp[now])
+        if mp[now+1]=='+':
+            r+=int(mp[now+2])
+        elif mp[now+1]=='-':
+            r-=int(mp[now+2])
+        elif mp[now+1]=='*':
+            r*=int(mp[now+2])
+        dfs(N, now+3, mx, r)
+    else:
+        r=0
+        if mp[now+2]=='-':
+            r=int(mp[now+1])-int(mp[now+3])
+        elif mp[now+2]=='+':
+            r=int(mp[now+1])+int(mp[now+3])
+        elif mp[now+2]=='*':
+            r=int(mp[now+1])*int(mp[now+3])
+        if mp[now]=='-':
+            dfs(N, now+2, mx, sm-int(mp[now+1]))
+            dfs(N, now+4, mx, sm-r)
+        elif mp[now]=='+':
+            dfs(N, now+2, mx, sm+int(mp[now+1]))
+            dfs(N, now+4, mx, sm+r)
+        elif mp[now]=='*':
+            dfs(N, now+2, mx, sm*int(mp[now+1]))
+            dfs(N, now+4, mx, sm*r)
+        
+N=int(sys.stdin.readline())
+mp=list(sys.stdin.readline().rstrip())
+mx=[int(mp[0])]
+cal=""
+for i in range(1, N):
+    if mp[i]=='+' or mp[i]=='*' or mp[i]=='-':
+        cal=mp[i]
+    else:
+        if cal=='+':
+            mx[0]=mx[0]+int(mp[i])
+        elif cal=='-':
+            mx[0]=mx[0]-int(mp[i])
+        elif cal=='*':
+            mx[0]=mx[0]*int(mp[i])
+if N==1:
+    print(int(mx[0]))
+else:
+    dfs(N, 0, mx, 0)
+    print(mx[0])
