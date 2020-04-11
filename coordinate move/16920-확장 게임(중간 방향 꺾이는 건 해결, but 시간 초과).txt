@@ -1,0 +1,50 @@
+import sys
+
+def bfs_simul(N, M, P, pl, mp):
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    tmp=[]
+    queue=[[] for _ in range(P+1)]
+    for i in range(N):
+        for j in range(M):
+            if mp[i][j]!='.' and mp[i][j]!='#':
+                queue[int(mp[i][j])].append([i, j])
+    while True:
+        flag=0
+        for i in range(1, P+1):
+            l=len(queue[i])
+            tmp.clear()
+            for j in range(l):
+                now=queue[i].pop(0)
+                tmp.append([now[0],now[1],1])
+                while tmp:
+                    now=tmp.pop(0)
+                    for k in range(4):
+                        nowx=now[0]+dx[k]
+                        nowy=now[1]+dy[k]
+                        if nowx<0 or nowx>=N or nowy<0 or nowy>=M:
+                            continue
+                        if mp[nowx][nowy]=='.':
+                            mp[nowx][nowy]=str(i)
+                            flag=1
+                            if now[2]==pl[i-1]:
+                                queue[i].append([nowx,nowy])
+                            else:
+                                tmp.append([nowx,nowy,now[2]+1])
+        if flag==0:
+            break
+
+N,M,P=map(int, sys.stdin.readline().split())
+pl=list(map(int, sys.stdin.readline().split()))
+mp=[]
+for _ in range(N):
+    mp.append(list(sys.stdin.readline().rstrip()))
+res=[0]*(P+1)
+bfs_simul(N, M, P, pl, mp)
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]!='.' and mp[i][j]!='#':
+            res[int(mp[i][j])]+=1
+for i in range(1, P+1):
+    print(res[i], end=' ')
+print()
