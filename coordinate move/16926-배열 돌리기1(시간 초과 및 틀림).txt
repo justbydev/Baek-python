@@ -1,0 +1,56 @@
+import sys
+
+def shift_left(mp, stx, sty, edx, edy):
+    tmp=mp[stx][sty]
+    for i in range(sty+1, edy+1):
+        mp[stx][i-1]=mp[stx][i]
+    return tmp
+def shift_down(mp, stx, sty, edx, edy, tp):
+    tmp=mp[edx][edy]
+    for i in range(edx-1, stx, -1):
+        mp[i+1][sty]=mp[i][sty]
+    mp[stx+1][sty]=tp
+    return tmp
+def shift_right(mp, stx, sty, edx, edy, tp):
+    tmp=mp[edx][edy]
+    for i in range(edy-1, sty, -1):
+        mp[stx][i+1]=mp[stx][i]
+    mp[stx][sty+1]=tp
+    return tmp
+def shift_up(mp, stx, sty, edx, edy, tp):
+    for i in range(edx+1, stx):
+        mp[i-1][sty]=mp[i][sty]
+    mp[stx-1][sty]=tp
+N,M,R=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+cycle=M*2+(N-2)*2
+R=R%cycle
+for i in range(R):
+    onex=oney=0
+    twox=0
+    twoy=M-1
+    threex=N-1
+    threey=0
+    fourx=N-1
+    foury=M-1
+    while True:
+        if onex>=twox and oney>=twoy:
+            break
+        t=shift_left(mp, onex, oney, twox, twoy)
+        t=shift_down(mp, onex, oney, threex, threey, t)
+        t=shift_right(mp, threex, threey, fourx, foury, t)
+        shift_up(mp, fourx, foury, twox, twoy, t)
+        onex+=1
+        oney+=1
+        twox+=1
+        twoy-=1
+        threex-=1
+        threey+=1
+        fourx-=1
+        foury-=1
+for i in range(N):
+    for j in range(M):
+        print(mp[i][j], end=' ')
+    print()
