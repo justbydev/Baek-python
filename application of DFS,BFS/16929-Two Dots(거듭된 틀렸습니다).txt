@@ -1,0 +1,36 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, M, mp, visit, nowx, nowy, stx, sty, cnt, flag):
+    dx=[-1, 0, 1, 0]
+    dy=[0, 1, 0, -1]
+    for i in range(4):
+        realnowx=nowx+dx[i]
+        realnowy=nowy+dy[i]
+        if flag[0]==1:
+            return
+        if realnowx<0 or realnowx>=N or realnowy<0 or realnowy>=M:
+            continue
+        if visit[realnowx][realnowy]==0 and mp[realnowx][realnowy]==mp[stx][sty]:
+            visit[realnowx][realnowy]=1
+            dfs(N, M, mp, visit, realnowx, realnowy, stx, sty, cnt+1, flag)
+            visit[realnowx][realnowy]=0
+        elif realnowx==stx and realnowy==sty and cnt>=4:
+            flag[0]=1
+            return
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(sys.stdin.readline().rstrip()))
+visit=[[0]*M for _ in range(N)]
+flag=[0]
+for i in range(N):
+    for j in range(M):
+        visit[i][j]=1
+        dfs(N, M, mp, visit, i, j, i, j, 0, flag)
+        visit[i][j]=0
+        if flag[0]==1:
+            break
+if flag[0]==1:
+    print("Yes")
+elif flag[0]==0:
+    print("No")
