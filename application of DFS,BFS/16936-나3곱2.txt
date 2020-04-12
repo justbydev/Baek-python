@@ -1,0 +1,30 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, num, flag, cnt, now, B):
+    if cnt>=N:
+        flag[0]=1
+        return
+    if num.get(now*2) and not B.get(now*2):
+        B[now*2]=1
+        dfs(N, num, flag, cnt+1, now*2, B)
+    if now%3==0 and num.get(now//3) and not B.get(now//3):
+        B[now//3]=1
+        dfs(N, num, flag, cnt+1, now//3, B)
+
+N=int(sys.stdin.readline())
+A=list(map(int, sys.stdin.readline().split()))
+num=dict()
+for i in range(N):
+    num[A[i]]=1
+B=dict()
+flag=[0]
+for i in range(N):
+    B[A[i]]=1
+    dfs(N, num, flag, 1, A[i], B)
+    if flag[0]==1:
+        break
+    else:
+        B.clear()
+for key in B.keys():
+    print(key, end=' ')
+print()
