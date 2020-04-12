@@ -1,0 +1,34 @@
+import sys
+
+def check(H, W, R, C, two):
+    flag=-1
+    if H>=R and W>=C:
+        if ((H-R)>=two[0] and W>=two[1]) or ((H-R)>=two[1] and W>=two[0]):
+            flag=R*C+two[0]*two[1]
+        if ((W-C)>=two[0] and H>=two[1]) or ((W-C)>=two[1] and H>=two[0]):
+            flag=R*C+two[0]*two[1]
+    return flag
+H,W=map(int, sys.stdin.readline().split())
+N=int(sys.stdin.readline())
+sticker=[]
+for _ in range(N):
+    sticker.append(list(map(int, sys.stdin.readline().split())))
+if N==1:
+    print(0)
+else:
+    res=0
+    for i in range(N):
+        for j in range(i+1, N):
+            r=check(H, W, sticker[i][0], sticker[i][1], sticker[j])
+            if r!=-1:
+                res=max(res, r)
+            r=check(H, W, sticker[i][1], sticker[i][0], sticker[j])
+            if r!=-1:
+                res=max(res, r)
+            r=check(H, W, sticker[j][0], sticker[j][1], sticker[i])
+            if r!=-1:
+                res=max(res, r)
+            r=check(H, W, sticker[j][1], sticker[j][0], sticker[i])
+            if r!=-1:
+                res=max(res, r)
+    print(res)
