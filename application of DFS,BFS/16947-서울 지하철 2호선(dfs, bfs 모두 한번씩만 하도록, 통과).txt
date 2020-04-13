@@ -1,0 +1,58 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+def bfs(queue, graph, N, res, cycle_check):
+    visit=[0]*(N+1)
+    while queue:
+        now=queue.popleft()
+        for i in range(len(graph[now])):
+            if cycle_check[graph[now][i]]==1:
+                continue
+            if visit[graph[now][i]]==0:
+                visit[graph[now][i]]=1
+                res[graph[now][i]]=res[now]+1
+                queue.append(graph[now][i])
+def dfs(visit, graph, now, start, cnt, flag, cycle, cycle_check, queue):
+    for i in range(len(graph[now])):
+        if flag[0]==1:
+            return
+        if visit[graph[now][i]]==0:
+            visit[graph[now][i]]=1
+            cycle.append(graph[now][i])
+            dfs(visit, graph, graph[now][i], start, cnt+1, flag, cycle, cycle_check, queue)
+            if cycle:
+                cycle.pop()
+            if flag[0]==1:
+                return
+        else:
+            if graph[now][i]==start and cnt>=3:
+                flag[0]=1
+                while cycle:
+                    cy=cycle.popleft()
+                    queue.append(cy)
+                    cycle_check[cy]=1
+                return
+N=int(sys.stdin.readline())
+graph=[[] for _ in range(N+1)]
+for _ in range(N):
+    st,ed=map(int, sys.stdin.readline().split())
+    graph[st].append(ed)
+    graph[ed].append(st)
+cycle_check=[0]*(N+1)
+flag=[0]
+queue=deque()
+for i in range(1, N+1):
+    visit=[0]*(N+1)
+    visit[i]=1
+    cycle=deque()
+    dfs(visit, graph, i, i, 1, flag, cycle, cycle_check, queue)
+    if flag[0]==1:
+        cycle_check[i]=1
+        queue.append(i)
+        break
+        
+res=[0]*(N+1)
+bfs(queue, graph, N, res, cycle_check)
+for i in range(1, N+1):
+    print(res[i], end=' ')
+print()
