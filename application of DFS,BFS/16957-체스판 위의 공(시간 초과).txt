@@ -1,0 +1,46 @@
+import sys
+from collections import deque
+
+def bfs(R, C, stx, sty, chess, boal):
+    queue=deque()
+    queue.append([stx,sty])
+    dx=[0, -1, -1, -1, 0, 1, 1, 1]
+    dy=[-1, -1, 0, 1, 1, 1, 0, -1]
+    while queue:
+        now=queue.popleft()
+        mx=my=-1
+        for i in range(8):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=R or nowy<0 or nowy>=C:
+                continue
+            if chess[now[0]][now[1]]<chess[nowx][nowy]:
+                continue
+            if mx==-1 and my==-1:
+                mx=nowx
+                my=nowy
+            else:
+                if chess[mx][my]>chess[nowx][nowy]:
+                    mx=nowx
+                    my=nowy
+        if mx==-1 and my==-1:
+            continue
+        else:
+            boal[mx][my]+=boal[now[0]][now[1]]
+            boal[now[0]][now[1]]=0
+            queue.append([mx, my])
+        
+R,C=map(int, sys.stdin.readline().split())
+chess=[]
+for _ in range(R):
+    chess.append(list(map(int, sys.stdin.readline().split())))
+boal=[[1]*C for _ in range(R)]
+
+for i in range(R):
+    for j in range(C):
+        if boal[i][j]!=0:
+            bfs(R, C, i, j, chess, boal)
+for i in range(R):
+    for j in range(C):
+        print(boal[i][j], end=' ')
+    print()
