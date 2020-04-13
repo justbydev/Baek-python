@@ -1,0 +1,33 @@
+import sys
+from collections import deque
+def bfs(A, B):
+    visit=dict()
+    visit[A]=1
+    count=deque()
+    queue=deque()
+    queue.append(A)
+    count.append(1)
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        if now*2<=B:
+            if now*2==B:
+                return cnt+1
+            if not visit.get(now*2):
+                visit[now*2]=1
+                queue.append(now*2)
+                count.append(cnt+1)
+        t=str(now)+'1'
+        t=int(t)
+        if t<=B:
+            if t==B:
+                return cnt+1
+            if not visit.get(t):
+                visit[t]=1
+                queue.append(t)
+                count.append(cnt+1)
+    return -1
+A,B=map(int, sys.stdin.readline().split())
+
+r=bfs(A, B)
+print(r)
