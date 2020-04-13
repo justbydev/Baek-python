@@ -1,0 +1,32 @@
+import sys
+
+R,C=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(R):
+    mp.append(list(sys.stdin.readline().rstrip()))
+dx=[0, -1, 0, 1]
+dy=[-1, 0, 1, 0]
+flag=1
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]=='W':
+            for k in range(4):
+                nowx=i+dx[k]
+                nowy=j+dy[k]
+                if nowx<0 or nowx>=R or nowy<0 or nowy>=C or mp[nowx][nowy]=='D':
+                    continue
+                if mp[nowx][nowy]=='S':
+                    flag=0
+                    break
+                if mp[nowx][nowy]=='.':
+                    mp[nowx][nowy]='D'
+        if flag==0:
+            break
+if flag==0:
+    print(flag)
+else:
+    print(flag)
+    for i in range(R):
+        for j in range(C):
+            print(mp[i][j], end='')
+        print()
