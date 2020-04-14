@@ -1,0 +1,74 @@
+import sys
+from collections import deque
+
+def bfs(N, M, mp, H, W, sx, sy, fx, fy):
+    queue=deque()
+    queue.append([sx,sy])
+    count=deque()
+    count.append(0)
+    visit=[[0]*M for _ in range(N)]
+    visit[sx][sy]=1
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        r=1
+        if now[1]+W<M and visit[now[0]][now[1]+1]==0: #우측으로
+            if now[0]==fx and (now[1]+1)==fy:
+                return cnt+1
+            visit[now[0]][now[1]+1]=1
+            for i in range(now[0], now[0]+H):
+                if i>=N or mp[i][now[1]+W]==1:
+                    r=0
+                    break
+            if r==1:
+                queue.append([now[0], now[1]+1])
+                count.append(cnt+1)
+        r=1
+        if now[1]-1>=0 and visit[now[0]][now[1]-1]==0: #좌측으로
+            if now[0]==fx and (now[1]-1)==fy:
+                return cnt+1
+            visit[now[0]][now[1]-1]=1
+            for i in range(now[0], now[0]+H):
+                if i>=N or mp[i][now[1]-1]==1:
+                    r=0
+                    break
+            if r==1:
+                queue.append([now[0], now[1]-1])
+                count.append(cnt+1)
+        r=1
+        if now[0]-1>=0 and visit[now[0]-1][now[1]]==0: #위로
+            if (now[0]-1)==fx and now[1]==fy:
+                return cnt+1
+            visit[now[0]-1][now[1]]=1
+            for i in range(now[1], now[1]+W):
+                if i>=M or mp[now[0]-1][i]==1:
+                    r=0
+                    break
+            if r==1:
+                queue.append([now[0]-1, now[1]])
+                count.append(cnt+1)
+        r=1
+        if now[0]+H<N and visit[now[0]+1][now[1]]==0:  #아래로
+            if (now[0]+1)==fx and now[1]==fy:
+                return cnt+1
+            visit[now[0]+1][now[1]]=1
+            for i in range(now[1], now[1]+W):
+                if i>=M or mp[now[0]+H][i]==1:
+                    r=0
+                    break
+            if r==1:
+                queue.append([now[0]+1, now[1]])
+                count.append(cnt+1)
+    return -1
+
+N,M=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+H,W,sx,sy,fx,fy=map(int, sys.stdin.readline().split())
+
+sx-=1
+sy-=1
+fx-=1
+fy-=1
+print(bfs(N, M, mp, H, W, sx, sy, fx, fy))
