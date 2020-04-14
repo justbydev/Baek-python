@@ -1,0 +1,29 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, graph, num, res, now, index):
+    if index[0]>=N:
+        res[0]=1
+        return
+    if res[0]==1:
+        return
+    while True:
+        if graph[now].get(num[index[0]]):
+            index[0]+=1
+            dfs(N, graph, num, res, num[index[0]-1],index)
+        else:
+            return
+        if index[0]>=N:
+            res[0]=1
+            return
+        
+N=int(sys.stdin.readline())
+graph=[dict() for _ in range(N+1)]
+for _ in range(N-1):
+    st,ed=map(int, sys.stdin.readline().split())
+    graph[st][ed]=1
+    graph[ed][st]=1
+num=list(map(int, sys.stdin.readline().split()))
+res=[0]
+index=[1]
+dfs(N, graph, num, res, 1, index)
+print(res[0])
