@@ -1,0 +1,20 @@
+import sys
+
+alpha=list(sys.stdin.readline().rstrip())
+l=len(alpha)
+if alpha[0]=='c':
+    res=26
+elif alpha[0]=='d':
+    res=10
+for i in range(1, l):
+    if alpha[i]=='c':
+        if alpha[i-1]=='c':
+            res=res*25
+        elif alpha[i-1]=='d':
+            res=res*26
+    elif alpha[i]=='d':
+        if alpha[i-1]=='c':
+            res=res*10
+        elif alpha[i-1]=='d':
+            res=res*9
+print(res)
