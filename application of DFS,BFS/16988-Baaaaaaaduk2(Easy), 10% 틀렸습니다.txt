@@ -1,0 +1,82 @@
+import sys
+from collections import deque
+
+def bfs(N, M, board, visit, cnt, stx, sty, checkpoint):
+    queue=deque()
+    queue.append([stx,sty])
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    count=0
+    while queue:
+        now=queue.popleft()
+        count+=1
+        for j in range(4):
+            tmx=now[0]+dx[j]
+            tmy=now[1]+dy[j]
+            if tmx<0 or tmx>=N or tmy<0 or tmy>=M:
+                continue
+            if board[tmx][tmy]==0 and [tmx,tmy] not in checkpoint:
+                visit[tmx][tmy]=cnt
+                checkpoint.append([tmx,tmy])
+        for i in range(4):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            if nowx<0 or nowx>=N or nowy<0 or nowy>=M or visit[nowx][nowy]!=0:
+                continue
+            if board[nowx][nowy]==2:
+                queue.append([nowx,nowy])
+                visit[nowx][nowy]=1
+    return count
+                
+                
+
+N,M=map(int, sys.stdin.readline().split())
+board=[]
+check=dict()
+checkcount=dict()
+for _ in range(N):
+    board.append(list(map(int, sys.stdin.readline().split())))
+visit=[[0]*M for _ in range(N)]
+cnt=2
+for i in range(N):
+    for j in range(M):
+        if visit[i][j]==0 and board[i][j]==2:
+            visit[i][j]=1
+            checkpoint=[]
+            ct=bfs(N, M, board, visit, cnt, i, j, checkpoint)
+            check[cnt]=checkpoint
+            checkcount[cnt]=ct
+            cnt+=1
+res=0
+
+for key in check.keys():
+    l=len(check[key])
+    if l>2:
+        continue
+    elif l==2:
+        tmp=checkcount[key]
+        one=check[key][0]
+        two=check[key][1]
+        for tmpkey in check.keys():
+            if key==tmpkey:
+                continue
+            if len(check[tmpkey])==1 and (one in check[tmpkey] or two in check[tmpkey]):
+                tmp=max(tmp, tmp+checkcount[tmpkey])
+            elif len(check[tmpkey])==2 and one in check[tmpkey] and two in check[tmpkey]:
+                tmp=max(tmp, tmp+checkcount[tmpkey])
+        res=max(res, tmp)
+    elif l==1:
+        tmp=checkcount[key]
+        one=check[key][0]
+        for tmpkey in check.keys():
+            if key==tmpkey:
+                continue
+            if len(check[tmpkey])==1 and one in check[tmpkey]:
+                tmp+=checkcount[tmpkey]
+        for tmpkey in check.keys():
+            if key==tmpkey:
+                continue
+            if len(check[tmpkey])==1 and one not in check[tmpkey]:
+                tmp=max(tmp, tmp+checkcount[tmpkey])
+        res=max(res, tmp)
+print(res)
