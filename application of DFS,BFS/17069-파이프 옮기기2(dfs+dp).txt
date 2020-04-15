@@ -1,0 +1,51 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+def dfs(N, mp, x, y, dr, visit, dx, dy):
+    if x==N-1 and y==N-1:
+        return 1
+    if visit[dr][x][y]!=-1:
+        return visit[dr][x][y]
+    visit[dr][x][y]=0
+    if dr==0:
+        nx=x+dx[dr]
+        ny=y+dy[dr]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 0, visit, dx, dy)
+        nx=x+dx[2]
+        ny=y+dy[2]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx-1][ny]==0 and mp[nx][ny-1]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 2, visit, dx, dy)
+    elif dr==1:
+        nx=x+dx[dr]
+        ny=y+dy[dr]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 1, visit, dx, dy)
+        nx=x+dx[2]
+        ny=y+dy[2]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx-1][ny]==0 and mp[nx][ny-1]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 2, visit, dx, dy)
+    elif dr==2:
+        nx=x+dx[dr]
+        ny=y+dy[dr]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx-1][ny]==0 and mp[nx][ny-1]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 2, visit, dx, dy)
+        nx=x+dx[0]
+        ny=y+dy[0]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 0, visit, dx, dy)
+        nx=x+dx[1]
+        ny=y+dy[1]
+        if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0:
+            visit[dr][x][y]+=dfs(N, mp, nx, ny, 1, visit, dx, dy)
+    return visit[dr][x][y]
+        
+N=int(sys.stdin.readline())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+visit=[[[-1]*N for _ in range(N)] for _ in range(3)]
+dx=[0, 1, 1]
+dy=[1, 0, 1]
+dfs(N, mp, 0, 1, 0, visit, dx, dy)
+print(visit[0][0][1])
