@@ -1,0 +1,67 @@
+import sys
+from collections import deque
+
+def bfs(N, mp):
+    queue=deque()
+    queue.append([[0,0], [0, 1]])
+    res=0
+    while queue:
+        now=queue.popleft()
+        if now[0][0]==now[1][0]: #가로
+            nx=now[0][0]
+            ny=now[1][1]+1
+            if ny>=0 and ny<N and mp[nx][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx, ny]])
+            nx=now[0][0]+1
+            ny=now[1][1]+1
+            if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx][ny-1]==0 and mp[nx-1][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx,ny]])
+        elif now[0][1]==now[1][1]:  #세로
+            nx=now[1][0]+1
+            ny=now[1][1]
+            if nx>=0 and nx<N and mp[nx][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0],now[1][1]], [nx, ny]])
+            nx=now[1][0]+1
+            ny=now[1][1]+1
+            if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx][ny-1]==0 and mp[nx-1][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx, ny]])
+        else:   #대각선
+            nx=now[1][0]
+            ny=now[1][1]+1
+            if ny>=0 and ny<N and mp[nx][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx, ny]])
+            nx=now[1][0]+1
+            ny=now[1][1]
+            if nx>=0 and nx<N and mp[nx][ny]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx, ny]])
+            nx=now[1][0]+1
+            ny=now[1][1]+1
+            if nx>=0 and nx<N and ny>=0 and ny<N and mp[nx][ny]==0 and mp[nx-1][ny]==0 and mp[nx][ny-1]==0:
+                if nx==N-1 and ny==N-1:
+                    res+=1
+                else:
+                    queue.append([[now[1][0], now[1][1]], [nx, ny]])
+    return res
+N=int(sys.stdin.readline())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+print(bfs(N, mp))
