@@ -1,0 +1,68 @@
+import sys
+from collections import deque
+
+def bfs(N, K, visit, visit2):
+    queue=deque()
+    queue.append(N)
+    time=1
+    visit[N]=0
+    while queue:
+        l=len(queue)
+        for _ in range(l):
+            now=queue.popleft()
+            if now-1>=0:
+                if time%2==0 and visit[now-1]==-1:
+                    queue.append(now-1)
+                    visit[now-1]=time
+                elif time%2==1 and visit2[now-1]==-1:
+                    queue.append(now-1)
+                    visit2[now-1]=time
+            if now+1<=500000:
+                if time%2==0 and visit[now+1]==-1:
+                    queue.append(now+1)
+                    visit[now+1]=time
+                elif time%2==1 and visit2[now+1]==-1:
+                    queue.append(now+1)
+                    visit2[now+1]=time
+            if now*2<=500000:
+                if time%2==0 and visit[now*2]==-1:
+                    queue.append(now*2)
+                    visit[now*2]=time
+                elif time%2==1 and visit2[now*2]==-1:
+                    queue.append(now*2)
+                    visit2[now*2]=time
+        time+=1
+N,K=map(int, sys.stdin.readline().split())
+if N==K:
+    print(0)
+else:
+    visit=[-1]*500001
+    visit2=[-1]*500001
+    bfs(N, K, visit, visit2)
+    cnt=1
+    time=1
+    res=1000000
+    while True:
+        K+=cnt
+        if K>500000:
+            break
+        if time%2==0 and visit[K]==-1:
+            time+=1
+            cnt+=1
+            continue
+        if time%2==1 and visit2[K]==-1:
+            time+=1
+            cnt+=1
+            continue
+        if time%2==0:
+            if visit[K]<=time:
+                res=min(res, time)
+        elif time%2==1:
+            if visit2[K]<=time:
+                res=min(res, time)
+        time+=1
+        cnt+=1
+    if res==1000000:
+        print(-1)
+    else:
+        print(res)
