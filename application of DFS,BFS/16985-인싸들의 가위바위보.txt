@@ -1,0 +1,100 @@
+import sys
+sys.setrecursionlimit(10**8)
+
+def dfs(N, K, mp, one, two, rnd, res, jcnt, kcnt, mcnt, visit, kyung, minho, kindex, mindex):
+    if kcnt>=K or mcnt>=K:
+        return
+    if jcnt>=K:
+        res[0]=1
+        return
+    if res[0]==1:
+        return
+    if rnd>=20:
+        return
+    orj=jcnt
+    ork=kcnt
+    orm=mcnt
+    orone=one
+    ortwo=two
+    orkindex=kindex
+    ormindex=mindex
+    if one=='k' and two=='m':
+        if res[0]==1:
+            return
+        if mp[kyung[kindex]-1][minho[mindex]-1]==1:
+            mcnt+=1
+            one='j'
+            two='m'
+        elif mp[kyung[kindex]-1][minho[mindex]-1]==0:
+            mcnt+=1
+            one='j'
+            two='m'
+        elif mp[kyung[kindex]-1][minho[mindex]-1]==2:
+            kcnt+=1
+            one='j'
+            two='k'
+        kindex+=1
+        mindex+=1
+        dfs(N, K, mp, one, two, rnd+1, res, jcnt, kcnt, mcnt, visit, kyung, minho, kindex, mindex)
+    else: 
+        for i in range(N):
+            if res[0]==1:
+                return
+            if visit[i]==0:
+                visit[i]=1
+                if one=='j' and two=='k':
+                    if mp[i][kyung[kindex]-1]==1:
+                        kcnt+=1
+                        one='k'
+                        two='m'
+                        kindex+=1
+                    elif mp[i][kyung[kindex]-1]==0:
+                        kcnt+=1
+                        one='k'
+                        two='m'
+                        kindex+=1
+                    elif mp[i][kyung[kindex]-1]==2:
+                        jcnt+=1
+                        one='j'
+                        two='m'
+                        kindex+=1
+                elif one=='j' and two=='m':
+                    if mp[i][minho[mindex]-1]==1:
+                        mcnt+=1
+                        one='k'
+                        two='m'
+                        mindex+=1
+                    elif mp[i][minho[mindex]-1]==0:
+                        mcnt+=1
+                        one='k'
+                        two='m'
+                        mindex+=1
+                    elif mp[i][minho[mindex]-1]==2:
+                        jcnt+=1
+                        one='j'
+                        two='k'
+                        mindex+=1
+                dfs(N, K, mp, one, two, rnd+1, res, jcnt, kcnt, mcnt, visit, kyung, minho, kindex, mindex)
+                visit[i]=0
+                jcnt=orj
+                kcnt=ork
+                mcnt=orm
+                one=orone
+                two=ortwo
+                kindex=orkindex
+                mindex=ormindex
+N,K=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(N):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+kyung=list(map(int, sys.stdin.readline().split()))
+minho=list(map(int, sys.stdin.readline().split()))
+jcnt=kcnt=mcnt=0
+one='j'
+two='k'
+res=[0]
+visit=[0]*N
+kindex=0
+mindex=0
+dfs(N, K, mp, one, two, 0, res, jcnt, kcnt, mcnt, visit, kyung, minho, kindex, mindex)
+print(res[0])
