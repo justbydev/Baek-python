@@ -1,0 +1,36 @@
+import sys
+sys.setrecursionlimit(10**8)
+def dfs(N, inner, weight, index, res):
+    if index>=N:
+        cnt=0
+        for i in range(N):
+            if inner[i]<=0:
+                cnt+=1
+        res[0]=max(res[0], cnt)
+        return
+    if inner[index]<=0:
+        dfs(N, inner, weight, index+1, res)
+        return
+    flag=0
+    for i in range(N):
+        if i==index or inner[i]<=0:
+            continue
+        inner[index]=inner[index]-weight[i]
+        inner[i]=inner[i]-weight[index]
+        flag=1
+        dfs(N, inner, weight, index+1, res)
+        inner[index]=inner[index]+weight[i]
+        inner[i]=inner[i]+weight[index]
+    if flag==0:
+        dfs(N, inner, weight, index+1, res)
+        
+N=int(sys.stdin.readline())
+inner=[]
+weight=[]
+for _ in range(N):
+    i,w=map(int, sys.stdin.readline().split())
+    inner.append(i)
+    weight.append(w)
+res=[0]
+dfs(N, inner, weight, 0, res)
+print(res[0])
