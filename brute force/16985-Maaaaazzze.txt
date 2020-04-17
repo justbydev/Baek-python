@@ -1,0 +1,79 @@
+import sys
+import itertools
+from collections import deque
+
+def bfs(tmp, res):
+    dx=[0, -1, 0, 1, 0, 0]
+    dy=[-1, 0, 1, 0, 0, 0]
+    dz=[0, 0, 0, 0, -1, 1]
+    queue=deque()
+    count=deque()
+    queue.append([0,0,0])
+    count.append(0)
+    visit=[[[0]*5 for _ in range(5)] for _ in range(5)]
+    visit[0][0][0]=1
+    while queue:
+        now=queue.popleft()
+        cnt=count.popleft()
+        for i in range(6):
+            nowx=now[0]+dx[i]
+            nowy=now[1]+dy[i]
+            nowz=now[2]+dz[i]
+            if nowx<0 or nowx>=5 or nowy<0 or nowy>=5 or nowz<0 or nowz>=5:
+                continue
+            if tmp[nowz][nowx][nowy]==0 or visit[nowz][nowx][nowy]==1:
+                continue
+            if nowz==4 and nowx==4 and nowy==4:
+                return cnt+1
+            queue.append([nowx, nowy, nowz])
+            count.append(cnt+1)
+            visit[nowz][nowx][nowy]=1
+    return -1
+            
+def rotate(mmp, k):
+    temp=[[0]*5 for _ in range(5)]
+    for i in range(5):
+        for j in range(5):
+            temp[j][4-i]=mmp[k][i][j]
+    mmp[k]=temp
+def make_solve(tmp, index, res):
+    if res[0]==12:
+        return
+    if index>=4:
+        r=bfs(tmp, res)
+        if r==12:
+            res[0]=12
+            return
+        if r!=-1:
+            if res[0]==-1:
+                res[0]=r
+            else:
+                res[0]=min(res[0], r)
+        return
+    for i in range(4):
+        if res[0]==12:
+            return
+        rotate(tmp, index)
+        make_solve(tmp, index+1, res)
+mp=[[list(map(int, sys.stdin.readline().split())) for _ in range(5)] for _ in range(5)]
+tmp=[[[0]*5 for _ in range(5)] for _ in range(5)]
+res=[-1]
+for d in itertools.permutations([0,1,2,3,4]):
+    for i in range(5):
+        tmp[i]=mp[d[i]]
+    for i in range(4):
+        if tmp[0][0][0]==1:
+            for j in range(5):
+                if tmp[4][4][4]==1:
+                    make_solve(tmp, 1, res)
+                    rotate(tmp, 4)
+                else:
+                    rotate(tmp, 4)
+                if res[0]==12:
+                    break
+            rotate(tmp, 0)
+        else:
+            rotate(tmp, 0)
+    if res[0]==12:
+        break
+print(res[0])
