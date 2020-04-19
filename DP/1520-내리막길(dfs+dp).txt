@@ -1,0 +1,27 @@
+import sys
+
+sys.setrecursionlimit(1000000)
+def dfs(M, N, mp, visit, dx, dy, nowx, nowy):
+    if nowx==0 and nowy==0:
+        return 1
+    if visit[nowx][nowy]!=-1:
+        return visit[nowx][nowy]
+    visit[nowx][nowy]=0
+    for i in range(4):
+        nx=nowx+dx[i]
+        ny=nowy+dy[i]
+        if nx<0 or nx>=M or ny<0 or ny>=N:
+            continue
+        if mp[nowx][nowy]>=mp[nx][ny]:
+            continue
+        visit[nowx][nowy]+=dfs(M, N, mp, visit, dx, dy, nx, ny)
+    return visit[nowx][nowy]
+M,N=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(M):
+    mp.append(list(map(int, sys.stdin.readline().split())))
+visit=[[-1]*N for _ in range(M)]
+dx=[0, 1, 0, -1]
+dy=[1, 0, -1, 0]
+dfs(M, N, mp, visit, dx, dy, M-1, N-1)
+print(visit[M-1][N-1])
