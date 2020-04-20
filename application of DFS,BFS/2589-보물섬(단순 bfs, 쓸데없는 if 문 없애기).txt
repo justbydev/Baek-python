@@ -1,0 +1,33 @@
+import sys
+from collections import deque
+
+def bfs(mp, stx, sty, H, W):
+    queue=deque()
+    dx=[0, -1, 0, 1]
+    dy=[-1, 0, 1, 0]
+    queue.append([stx, sty, 0])
+    visit=[[0]*W for _ in range(H)]
+    visit[stx][sty]=1
+    res=0
+    while queue:
+        now=queue.popleft()
+        for i in range(4):
+            nx=now[0]+dx[i]
+            ny=now[1]+dy[i]
+            if nx<0 or nx>=H or ny<0 or ny>=W or visit[nx][ny]==1 or mp[nx][ny]=='W':
+                continue
+            queue.append([nx, ny, now[2]+1])
+            visit[nx][ny]=1
+            res=now[2]+1
+    return res
+H,W=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(H):
+    mp.append(list(sys.stdin.readline().rstrip()))
+res=-1
+for i in range(H):
+    for j in range(W):
+        if mp[i][j]=='L':
+            res=max(res, bfs(mp, i, j, H, W))
+            
+print(res)
