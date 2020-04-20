@@ -1,0 +1,76 @@
+import sys
+from collections import deque
+
+t=int(sys.stdin.readline())
+alpha=list(sys.stdin.readline().rstrip())
+mp=deque()
+mp.append(['.'])
+dr=2
+N=M=1
+nowx=0
+nowy=0
+dx=[-1, 0, 1, 0]
+dy=[0, 1, 0, -1]
+for i in range(t):
+    if alpha[i]=='R':
+        dr+=1
+        if dr==4:
+            dr=0
+    elif alpha[i]=='L':
+        dr-=1
+        if dr==-1:
+            dr=3
+    elif alpha[i]=='F':
+        nx=nowx+dx[dr]
+        ny=nowy+dy[dr]
+        if nx<0:
+            tmp=deque()
+            for j in range(M):
+                if j==ny:
+                    tmp.append('.')
+                else:
+                    tmp.append('?')
+            mp.appendleft(tmp)
+            N+=1
+            nowx=0
+            nowy=ny
+        elif nx>=N:
+            tmp=deque()
+            for j in range(M):
+                if j==ny:
+                    tmp.append('.')
+                else:
+                    tmp.append('?')
+            mp.append(tmp)
+            N+=1
+            nowx=N-1
+            nowy=ny
+        elif ny<0:
+            for j in range(N):
+                if j==nx:
+                    mp[j].insert(0, '.')
+                else:
+                    mp[j].insert(0, '?')
+            M+=1
+            nowx=nx
+            nowy=0
+        elif ny>=M:
+            for j in range(N):
+                if j==nx:
+                    mp[j].append('.')
+                else:
+                    mp[j].append('?')
+            M+=1
+            nowx=nx
+            nowy=M-1
+        else:
+            mp[nx][ny]='.'
+            nowx=nx
+            nowy=ny
+for i in range(N):
+    for j in range(M):
+        if mp[i][j]=='?':
+            print('#', end='')
+        else:
+            print(mp[i][j], end='')
+    print()
