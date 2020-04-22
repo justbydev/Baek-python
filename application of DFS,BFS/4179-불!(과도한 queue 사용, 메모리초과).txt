@@ -1,0 +1,52 @@
+import sys
+from collections import deque
+
+def bfs(R, C, mp, fire, stx, sty):
+    time=0
+    queue=deque()
+    queue.append([stx,sty])
+    dx=[-1, 0, 1, 0]
+    dy=[0, 1, 0, -1]
+    while queue:
+        l=len(fire)
+        for i in range(l):
+            nw=fire.popleft()
+            for j in range(4):
+                nx=nw[0]+dx[j]
+                ny=nw[1]+dy[j]
+                if nx<0 or nx>=R or ny<0 or ny>=C or mp[nx][ny]=='F' or mp[nx][ny]=='#':
+                    continue
+                fire.append([nx, ny])
+                mp[nx][ny]='F'
+        l=len(queue)
+        for i in range(l):
+            nw=queue.popleft()
+            for j in range(4):
+                nx=nw[0]+dx[j]
+                ny=nw[1]+dy[j]
+                if nx<0 or nx>=R or ny<0 or ny>=C:
+                    return time+1
+                if mp[nx][ny]=='F' or mp[nx][ny]=='#':
+                    continue
+                queue.append([nx, ny])
+        time+=1
+    return -1
+R,C=map(int, sys.stdin.readline().split())
+mp=[]
+for _ in range(R):
+    mp.append(list(sys.stdin.readline().rstrip()))
+stx=sty=-1
+fire=deque()
+for i in range(R):
+    for j in range(C):
+        if mp[i][j]=='J':
+            stx=i
+            sty=j
+            mp[i][j]='.'
+        elif mp[i][j]=='F':
+            fire.append([i,j])
+r=bfs(R, C, mp, fire, stx, sty)
+if r==-1:
+    print("IMPOSSIBLE")
+else:
+    print(r)
