@@ -1,0 +1,86 @@
+import sys
+
+def uclid(up, down):
+    r=0
+    while True:
+        if up==0:
+            r=down
+            break
+        if down==0:
+            r=up
+            break
+        if up>=down:
+            up=up%down
+        elif up<down:
+            down=down%up
+    return r
+t=int(sys.stdin.readline())
+for _ in range(t):
+    nw=sys.stdin.readline()
+    l=len(nw)
+    index=2
+    total=""
+    nt=""
+    garo=""
+    goo=""
+    flag=0
+    while True:
+        if index>=l-1:
+            break
+        if nw[index]=='(':
+            index+=1
+            flag=1
+            while True:
+                if nw[index]==')':
+                    index+=1
+                    break
+                if index>=l:
+                    break
+                garo=garo+nw[index]
+                total=total+nw[index]
+                goo=goo+"9"
+                index+=1
+        else:
+            total=total+nw[index]
+            nt=nt+nw[index]
+        index+=1
+    if flag==1:
+        garo=int(garo)
+        goo=int(goo)
+    if flag==1:
+        ten=1
+        cnt=1
+        l=len(nt)
+        while True:
+            if cnt>l:
+                break
+            ten=ten*10
+            cnt+=1
+        if l==0:
+            nt=0
+        else:
+            nt=int(nt)
+        goo=goo*ten
+        down=goo
+        total=int(total)
+        up=total-nt
+        r=uclid(up, down)
+        print(up//r, end='')
+        print('/', end='')
+        print(down//r)
+    else:
+        ten=1
+        l=len(total)
+        cnt=1
+        while True:
+            if cnt>l:
+                break
+            ten=ten*10
+            cnt+=1
+        total=int(total)
+        down=ten
+        up=total
+        r=uclid(up, down)
+        print(up//r, end='')
+        print('/', end='')
+        print(down//r)
