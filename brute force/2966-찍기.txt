@@ -1,0 +1,84 @@
+import sys
+
+N=int(sys.stdin.readline())
+Q=list(sys.stdin.readline().rstrip())
+cnt=[0]*3
+sang=[]
+chang=[]
+hyun=[]
+for i in range(0, 99, 3):
+    sang.append('A')
+    sang.append('B')
+    sang.append('C')
+sang.append('A')
+for i in range(0, 100, 4):
+    chang.append('B')
+    chang.append('A')
+    chang.append('B')
+    chang.append('C')
+for i in range(0, 96, 6):
+    hyun.append('C')
+    hyun.append('C')
+    hyun.append('A')
+    hyun.append('A')
+    hyun.append('B')
+    hyun.append('B')
+hyun.append('C')
+hyun.append('C')
+hyun.append('A')
+hyun.append('A')
+for i in range(N):
+    if Q[i]==sang[i]:
+        cnt[0]+=1
+    if Q[i]==chang[i]:
+        cnt[1]+=1
+    if Q[i]==hyun[i]:
+        cnt[2]+=1
+r=0
+if cnt[0]>cnt[1]:
+    if cnt[0]>cnt[2]:
+        r=1
+    elif cnt[0]==cnt[2]:
+        r=5
+    elif cnt[0]<cnt[2]:
+        r=4
+elif cnt[0]==cnt[1]:
+    if cnt[1]<cnt[2]:
+        r=4
+    elif cnt[1]==cnt[2]:
+        r=7
+    elif cnt[1]>cnt[2]:
+        r=3
+elif cnt[0]<cnt[1]:
+    if cnt[1]>cnt[2]:
+        r=2
+    elif cnt[1]==cnt[2]:
+        r=6
+    elif cnt[1]<cnt[2]:
+        r=4
+if r==1:
+    print(cnt[0])
+    print("Adrian")
+elif r==2:
+    print(cnt[1])
+    print("Bruno")
+elif r==4:
+    print(cnt[2])
+    print("Goran")
+elif r==3:
+    print(cnt[0])
+    print("Adrian")
+    print("Bruno")
+elif r==5:
+    print(cnt[0])
+    print("Adrian")
+    print("Goran")
+elif r==6:
+    print(cnt[1])
+    print("Bruno")
+    print("Goran")
+elif r==7:
+    print(cnt[0])
+    print("Adrian")
+    print("Bruno")
+    print("Goran")
