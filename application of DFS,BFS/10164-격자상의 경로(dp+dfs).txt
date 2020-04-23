@@ -1,0 +1,46 @@
+import sys
+sys.setrecursionlimit(10**8)
+
+def dfs(fx, fy, ex, ey, nowx, nowy, sx, sy, dx, dy, visit):
+    if nowx==sx and nowy==sy:
+        return 1
+    if visit[nowx][nowy]!=-1:
+        return visit[nowx][nowy]
+    visit[nowx][nowy]=0
+    for i in range(2):
+        nx=nowx+dx[i]
+        ny=nowy+dy[i]
+        if nx<fx or nx>ex or ny<fy or ny>ey:
+            continue
+        visit[nowx][nowy]+=dfs(fx, fy, ex, ey, nx, ny, sx, sy, dx, dy, visit)
+    return visit[nowx][nowy]
+            
+    
+N,M,K=map(int, sys.stdin.readline().split())
+visit=[[-1]*M for _ in range(N)]
+tx=ty=-1
+if K!=0:
+    cnt=1
+    for i in range(N):
+        for j in range(M):
+            if cnt==K:
+                tx=i
+                ty=j
+                break
+            cnt+=1
+        if tx!=-1:
+            break
+res=0
+dx=[0, -1]
+dy=[-1, 0]
+if tx==-1:
+    dfs(0, 0, N-1, M-1, N-1, M-1, 0, 0, dx, dy, visit)
+    res=visit[N-1][M-1]
+else:
+    dfs(0, 0, tx, ty, tx, ty, 0, 0, dx, dy, visit)
+    one=visit[tx][ty]
+    visit[tx][ty]=-1
+    dfs(tx, ty, N-1, M-1, N-1, M-1, tx, ty, dx, dy, visit)
+    two=visit[N-1][M-1]
+    res=one*two
+print(res)
