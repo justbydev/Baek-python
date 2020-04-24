@@ -1,0 +1,65 @@
+import sys
+from collections import deque
+def cal_dst(sx, sy, ex, ey):
+    return abs(sx-ex)+abs(sy-ey)
+N=int(sys.stdin.readline())
+W=int(sys.stdin.readline())
+acc=[]
+for _ in range(W):
+    x,y=map(int, sys.stdin.readline().split())
+    acc.append([x-1, y-1])
+dp=[[0]*(W+1) for _ in range(W+1)]
+if W==1:
+    print(min(acc[0][0]+acc[0][1], abs(N-1-acc[0][0])+abs(N-1-acc[0][1])))
+else:
+    dp[0][1]=cal_dst(N-1, N-1, acc[0][0], acc[0][1])
+    for i in range(2, W+1):
+        dp[0][i]=dp[0][i-1]+cal_dst(acc[i-2][0], acc[i-2][1], acc[i-1][0], acc[i-1][1])
+    dp[1][0]=cal_dst(0, 0, acc[0][0], acc[0][1])
+    for i in range(2, W+1):
+        dp[i][0]=dp[i-1][0]+cal_dst(acc[i-2][0], acc[i-2][1], acc[i-1][0], acc[i-1][1])
+    for i in range(1, W+1):
+        for j in range(1, W+1):
+            if i==j:
+                continue
+            elif i>j:
+                if i-j==1:
+                    if j==1:
+                        dp[i][j]=cal_dst(0, 0, acc[i-1][0], acc[i-1][1])+cal_dst(N-1, N-1, acc[j-1][0], acc[j-1][1])
+                    else:
+                        r=dp[0][j]+cal_dst(0, 0, acc[i-1][0], acc[i-1][1])
+                        for k in range(1, j):
+                            r=min(r, dp[k][j]+cal_dst(acc[k-1][0], acc[k-1][1], acc[i-1][0], acc[i-1][1]))
+                        r=min(r, dp[i][0]+cal_dst(N-1, N-1, acc[j-1][0], acc[j-1][1]))
+                        for k in range(1, j):
+                            r=min(r, dp[i][k]+cal_dst(acc[k-1][0], acc[k-1][1], acc[j-1][0], acc[j-1][1]))
+                        dp[i][j]=r
+                else:
+                    dp[i][j]=dp[i-1][j]+cal_dst(acc[i-1][0], acc[i-1][1], acc[i-2][0], acc[i-2][1])
+            else:
+                if j-i==1:
+                    if i==1:
+                        dp[i][j]=cal_dst(0, 0, acc[i-1][0], acc[i-1][1])+cal_dst(N-1, N-1, acc[j-1][0], acc[j-1][1])
+                    else:
+                        r=dp[0][j]+cal_dst(0, 0, acc[i-1][0], acc[i-1][1])
+                        for k in range(1, i):
+                            r=min(r, dp[k][j]+cal_dst(acc[k-1][0], acc[k-1][1], acc[i-1][0], acc[i-1][1]))
+                        r=min(r, dp[i][0]+cal_dst(N-1, N-1, acc[j-1][0], acc[j-1][1]))
+                        for k in range(1, i):
+                            r=min(r, dp[i][k]+cal_dst(acc[k-1][0], acc[k-1][1], acc[j-1][0], acc[j-1][1]))
+                        dp[i][j]=r
+                else:
+                    dp[i][j]=dp[i][j-1]+cal_dst(acc[j-1][0], acc[j-1][1], acc[j-2][0], acc[j-2][1])
+    res=dp[0][W]
+    pol=2
+    for i in range(W):
+        if dp[i][W]<res:
+            res=dp[i][W]
+            pol=2
+        if dp[W][i]<res:
+            res=dp[W][i]
+            pol=1
+    q=deque()
+    q.append(pol)
+    
+    print(res)
