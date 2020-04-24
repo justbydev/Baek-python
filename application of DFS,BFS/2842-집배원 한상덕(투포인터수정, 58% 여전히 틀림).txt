@@ -1,0 +1,75 @@
+import sys
+sys.setrecursionlimit(10**8)
+
+def dfs(N, mp, height, low, high, visit, dx, dy, nowx, nowy):
+    for i in range(8):
+        nx=nowx+dx[i]
+        ny=nowy+dy[i]
+        if nx<0 or nx>=N or ny<0 or ny>=N or visit[nx][ny]==1:
+            continue
+        if height[nx][ny]>=low and height[nx][ny]<=high:
+            visit[nx][ny]=1
+            dfs(N, mp, height, low, high, visit, dx, dy, nx, ny)
+
+N=int(sys.stdin.readline())
+mp=[]
+for _ in range(N):
+    mp.append(list(sys.stdin.readline().rstrip()))
+height=[]
+for _ in range(N):
+    height.append(list(map(int, sys.stdin.readline().split())))
+h=[]
+stx=sty=-1
+q=[]
+for i in range(N):
+    for j in range(N):
+        h.append(height[i][j])
+        if mp[i][j]=='P':
+            stx=i
+            sty=j
+            mp[i][j]='.'
+        elif mp[i][j]=='K':
+            q.append([i, j])
+h.sort()
+realh=[]
+realh.append(h[0])
+l=len(h)
+lq=len(q)
+for i in range(1, l):
+    if h[i-1]==h[i]:
+        continue
+    realh.append(h[i])
+low=high=0
+res=1000001
+dx=[-1, -1, 0, 1, 1, 1, 0, -1]
+dy=[0, 1, 1, 1, 0, -1, -1, -1]
+while True:
+    if realh[high]-realh[low]>=res:
+        low+=1
+        if low>high:
+            high+=1
+    else:
+        visit=[[0]*N for _ in range(N)]
+        visit[stx][sty]=1
+        dfs(N, mp, height, realh[low], realh[high], visit, dx, dy, stx, sty)
+        flag=1
+        for i in range(lq):
+            if visit[q[i][0]][q[i][1]]==0:
+                flag=0
+                break
+        if flag==1 and low==high:
+            res=0
+            break
+        if flag==1:
+            res=min(res, realh[high]-realh[low])
+            low+=1
+            if low>high:
+                high+=1
+        else:
+            if high>=len(realh)-1:
+                low+=1
+            else:
+                high+=1
+    if low>=len(realh):
+        break
+print(res)
