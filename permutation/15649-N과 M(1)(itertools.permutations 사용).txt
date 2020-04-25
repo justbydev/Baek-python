@@ -1,0 +1,9 @@
+import sys
+import itertools
+
+N,M=map(int, sys.stdin.readline().split())
+num=[i for i in range(1, N+1)]
+for d in itertools.permutations(num, M):
+    for i in range(M):
+        print(d[i], end=' ')
+    print()
