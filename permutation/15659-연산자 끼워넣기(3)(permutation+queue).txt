@@ -1,0 +1,67 @@
+import sys
+from collections import deque
+sys.setrecursionlimit(10**8)
+
+def dfs(N, num, cal, cl, mx, mn, queue, cnt):
+    if cnt>=N-1:
+        real=deque()
+        number=0
+        index=0
+        while index<len(queue):
+            now=queue[index]
+            if now=='+':
+                real.append(number)
+                real.append('+')
+                index+=1
+            elif now=='-':
+                real.append(number)
+                real.append('-')
+                index+=1
+            elif now=='*':
+                index+=1
+                nx=queue[index]
+                number=number*nx
+                index+=1
+            elif now=='/':
+                index+=1
+                nx=queue[index]
+                number=number//nx
+                index+=1
+            else:
+                number=now
+                index+=1
+        real.append(number)
+        res=real.popleft()
+        while real:
+            now=real.popleft()
+            if now=='+':
+                nx=real.popleft()
+                res+=nx
+            elif now=='-':
+                nx=real.popleft()
+                res-=nx
+        mx[0]=max(mx[0], res)
+        mn[0]=min(mn[0], res)
+        return
+    for i in range(4):
+        if cal[i]!=0:
+            queue.append(cl[i])
+            queue.append(num[cnt+1])
+            cal[i]-=1
+            dfs(N, num, cal, cl, mx, mn, queue, cnt+1)
+            cal[i]+=1
+            queue.pop()
+            queue.pop()
+            
+N=int(sys.stdin.readline())
+num=list(map(int, sys.stdin.readline().split()))
+
+cal=list(map(int, sys.stdin.readline().split()))
+cl=['+', '-', '*', '/']
+mx=[-10000000000]
+mn=[10000000000]
+queue=deque()
+queue.append(num[0])
+dfs(N, num, cal, cl, mx, mn, queue, 0)
+print(mx[0])
+print(mn[0])
