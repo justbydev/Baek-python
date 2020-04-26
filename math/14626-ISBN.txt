@@ -1,0 +1,26 @@
+import sys
+
+num=list(sys.stdin.readline().rstrip())
+sm=0
+nt=0
+for i in range(12):
+    if num[i]!='*':
+        if i%2==0:
+            sm=sm+int(num[i])
+        else:
+            sm=sm+3*int(num[i])
+    elif num[i]=='*':
+        if i%2==0:
+            nt=1
+        else:
+            nt=3
+check=int(num[12])
+if check==0:
+    check=10
+check=10-check
+res=0
+for i in range(10):
+    if (sm+nt*i)%10==check:
+        res=i
+        break
+print(res)
