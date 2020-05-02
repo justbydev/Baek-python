@@ -28,6 +28,8 @@ def bfs(N, M, mp, stx, sty, ex, ey, visit, dx, dy, beforedr, check):
             if nx==ex and ny==ey:
                 check[i]=1
                 res=cnt+1
+                queue.append([nx, ny, i, cnt+1])
+                visit[i][nx][ny]=1
                 continue
             queue.append([nx, ny, i, cnt+1])
             visit[i][nx][ny]=1
