@@ -1,7 +1,7 @@
 import sys
 sys.setrecursionlimit(10**8)
 
-def dfs(N, oneway, visit, visitstack , now):
+def dfs(N, oneway, visit, visitstack, now):
     visit[now]=1
     visitstack[now]=1
     cycle=0
@@ -32,7 +32,7 @@ for i in range(N):
     if visit[i]==1:
         continue
     visitstack=[0]*N
-    cycle=dfs(N, oneway, visit, visitstack, 0)
+    cycle=dfs(N, oneway, visit, visitstack, i)
     if cycle==1:
         break
 if cycle==1:
